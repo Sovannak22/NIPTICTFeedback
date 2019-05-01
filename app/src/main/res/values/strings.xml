@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">NIPTICT Feedback</string>
+    <string name="signup_text"><u>Signup now</u></string>
+    <string name="login_text"><u>Login now</u></string>
+</resources>

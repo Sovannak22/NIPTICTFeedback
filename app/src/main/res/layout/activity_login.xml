@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:id="@+id/login_form"
+            android:layout_centerVertical="true"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:background="@drawable/white_round_background"
+            android:layout_marginHorizontal="25dp"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:padding="@dimen/paddingSize">
+
+                <!--NIPTICT icon logo##########################################################-->
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_feedback"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+                <!--Student ID edit text ###########################################################-->
+                <EditText
+                    android:id="@+id/txt_id"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/white_round_background"
+                    android:layout_margin="@dimen/paddingSize"
+                    android:hint="Student ID"
+                    android:padding="@dimen/paddingSize"
+                    android:textSize="@dimen/text_size"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+                <!--Password edit text ################################################################-->
+                <EditText
+                    android:id="@+id/txt_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/white_round_background"
+                    android:layout_margin="@dimen/paddingSize"
+                    android:hint="Password"
+                    android:padding="@dimen/paddingSize"
+                    android:textSize="@dimen/text_size"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"></LinearLayout>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2">
+
+                    <!--Login button ###################################################################-->
+                    <Button
+                        android:id="@+id/btn_login"
+                        android:layout_margin="@dimen/paddingSize"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:textSize="@dimen/text_size"
+                        android:text="Log in"
+                        android:textColor="@color/colorAccent"
+                        android:background="@drawable/blue_white_background"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"></LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_marginBottom="-50dp"
+            android:layout_alignBottom="@id/login_form"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+            <TextView
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/textSizeSmall"
+                android:textColor="@color/colorAccent"
+                android:text="Don't have an account yet? "/>
+            <TextView
+                android:id="@+id/tv_signup"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/textSizeSmall"
+                android:textColor="@color/colorAccent"
+                android:text="@string/signup_text"/>
+        </LinearLayout>
+    </RelativeLayout>
+</LinearLayout>

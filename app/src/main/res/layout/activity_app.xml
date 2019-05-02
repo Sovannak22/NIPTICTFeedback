@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        >
+        <android.support.v4.view.ViewPager
+            android:id="@+id/app_view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </android.support.v4.view.ViewPager>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/bottom_place"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+        <android.support.design.widget.TabLayout
+            android:id="@+id/app_tab_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            >
+            <android.support.design.widget.TabItem
+                android:id="@+id/tab_home"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:icon="@drawable/ic_house_black_silhouette_without_door"/>
+            <android.support.design.widget.TabItem
+                android:id="@+id/tab_news"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:icon="@drawable/ic_newspaper"
+                />
+            <android.support.design.widget.TabItem
+                android:id="@+id/tab_post"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:icon="@drawable/ic_pencil"/>
+            <android.support.design.widget.TabItem
+                android:id="@+id/tab_profile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:icon="@drawable/ic_user"/>
+            <android.support.design.widget.TabItem
+                android:id="@+id/tab_notification"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:icon="@drawable/ic_notifications_button"/>
+
+        </android.support.design.widget.TabLayout>
+    </LinearLayout>
+</LinearLayout>

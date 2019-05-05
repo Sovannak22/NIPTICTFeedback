@@ -7,6 +7,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import com.example.niptictfeedback.adapter.page_adapter.PageAdapter;
 
@@ -21,7 +22,7 @@ public class AppActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_app);
-
+        Log.e("Token",""+((MyApplication)this.getApplication()).getAuthorization());
         tabLayout = findViewById(R.id.app_tab_layout);
 
         homeTabItem = findViewById(R.id.tab_home);

@@ -33,7 +33,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RegisterActivity extends AppCompatActivity {
 
     private TextView tvLogin;
-    private UserApi userApi;
     private EditText txtFullname;
     private EditText txtStudentId;
     private EditText txtPassword;
@@ -42,6 +41,8 @@ public class RegisterActivity extends AppCompatActivity {
     private RadioGroup radioGroupGender;
     private RadioButton radioButtonGender;
     private Button btnRegister;
+    //Declare for access user api
+    private UserApi userApi;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,9 +85,6 @@ public class RegisterActivity extends AppCompatActivity {
                 if (password.equals(cPassword)){
                     addListenerButton();
                     createPost();
-                    Intent intent = new Intent(RegisterActivity.this,AppActivity.class);
-                    startActivity(intent);
-                    finish();
                 }
                 else {
                     Toast.makeText(getApplicationContext(),"Password and Comfirm password must be the same",Toast.LENGTH_LONG).show();
@@ -136,5 +134,7 @@ public class RegisterActivity extends AppCompatActivity {
         radioButtonGender = findViewById(selectedId);
         gender = radioButtonGender.getText().toString();
     }
+
+
 
 }

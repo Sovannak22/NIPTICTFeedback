@@ -107,7 +107,7 @@
                 android:layout_marginVertical="@dimen/paddingSize">
                 <EditText
                     android:padding="@dimen/paddingSize"
-                    android:id="@+id/txt_cpassword"
+                    android:id="@+id/txt_c_password"
                     android:hint="Confirm Password"
                     android:textColor="@color/colorPrimary"
                     android:textSize="@dimen/text_size"
@@ -123,6 +123,7 @@
 
                 <!--Gender Radio box ###################################################################-->
                 <RadioGroup
+                    android:id="@+id/radio_group_gender"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal">
@@ -134,6 +135,7 @@
                         android:textColor="@color/hintColor"
                         android:text="Gender: "/>
                     <RadioButton
+                        android:id="@+id/rbtn_male"
                         android:textSize="@dimen/text_size"
                         android:textColor="@color/hintColor"
                         android:layout_width="wrap_content"
@@ -143,6 +145,7 @@
                         android:buttonTint="@color/colorPrimary"
                         />
                     <RadioButton
+                        android:id="@+id/rbtn_female"
                         android:textColor="@color/hintColor"
                         android:textSize="@dimen/text_size"
                         android:layout_width="wrap_content"

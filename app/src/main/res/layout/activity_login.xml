@@ -38,8 +38,8 @@
                     android:layout_height="match_parent"
                     android:background="@drawable/white_round_background"
                     android:layout_margin="@dimen/paddingSize"
-                    android:hint="Student ID"
-                    android:padding="@dimen/paddingSize"
+                    android:hint="Your ID"
+                    android:padding= "@dimen/paddingSize"
                     android:textSize="@dimen/text_size"/>
             </LinearLayout>
             <LinearLayout
@@ -55,6 +55,7 @@
                     android:background="@drawable/white_round_background"
                     android:layout_margin="@dimen/paddingSize"
                     android:hint="Password"
+                    android:inputType="textPassword"
                     android:padding="@dimen/paddingSize"
                     android:textSize="@dimen/text_size"/>
             </LinearLayout>
@@ -104,15 +105,16 @@
                 android:textSize="@dimen/textSizeSmall"
                 android:textColor="@color/colorAccent"
                 android:text="Don't have an account yet? "/>
+
             <TextView
                 android:id="@+id/tv_signup"
-                android:gravity="center"
-                android:layout_gravity="center"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/textSizeSmall"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="@string/signup_text"
                 android:textColor="@color/colorAccent"
-                android:text="@string/signup_text"/>
+                android:textSize="@dimen/textSizeSmall" />
         </LinearLayout>
     </RelativeLayout>
 </LinearLayout>

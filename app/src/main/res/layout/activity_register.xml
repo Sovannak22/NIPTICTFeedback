@@ -53,8 +53,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"
-                android:layout_marginVertical="@dimen/paddingSize">
+                android:layout_weight="1">
                 <EditText
                     android:padding="@dimen/paddingSize"
                     android:id="@+id/txt_fullname"
@@ -75,7 +74,7 @@
                 <EditText
                     android:padding="@dimen/paddingSize"
                     android:id="@+id/txt_student_id"
-                    android:hint="Student ID"
+                    android:hint="Your ID"
                     android:textColor="@color/colorPrimary"
                     android:textSize="@dimen/text_size"
                     android:layout_width="match_parent"

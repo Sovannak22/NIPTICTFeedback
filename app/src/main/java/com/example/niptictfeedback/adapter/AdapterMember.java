@@ -43,7 +43,7 @@ public class AdapterMember extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        View v = View.inflate(context, R.layout.listview_notifi,null);
+        View v = View.inflate(context, R.layout.imgview_notifi,null);
         ImageView imgCar = v.findViewById(R.id.img_pro);
         TextView textViewCarName =v.findViewById(R.id.tv_view1);
         TextView textViewPrice = v.findViewById(R.id.tv_view2);
@@ -52,7 +52,7 @@ public class AdapterMember extends BaseAdapter {
 
         imgCar.setImageResource(profilemodel.getImg_id());
         textViewCarName.setText(profilemodel.getPro_name());
-        textViewCarName.setText(profilemodel.getDescription()+"");
+        textViewPrice.setText(profilemodel.getDescription()+"");
 
         return v;
 

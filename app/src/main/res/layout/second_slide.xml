@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_gravity="center_vertical"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+           android:layout_marginBottom="20dp"
+            android:src="@drawable/secondslide"
+            android:layout_width="match_parent"
+
+            android:layout_height="350dp" />
+
+    </LinearLayout>
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_marginVertical="@dimen/paddingSize">
+
+        <!--Gender Radio box ###################################################################-->
+        <RadioGroup
+
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <RadioButton
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/paddingSize"
+
+                android:buttonTint="@color/colorPrimary"
+                />
+            <RadioButton
+                android:onClick="Checkbutton"
+                android:checked="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/paddingSize"
+                android:buttonTint="@color/colorPrimary"></RadioButton>
+
+            <RadioButton
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/paddingSize"
+                android:buttonTint="@color/colorPrimary"></RadioButton>
+
+        </RadioGroup>
+
+    </LinearLayout>
+    <LinearLayout
+
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        >
+        <Button
+            android:layout_marginTop="50dp"
+            android:id="@+id/btn_register"
+            android:layout_width="300dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/blue_white_background"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/text_size"
+            android:text="Enter"/>
+    </LinearLayout>
+</LinearLayout>

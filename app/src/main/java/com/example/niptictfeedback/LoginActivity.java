@@ -26,6 +26,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText txtStuId,txtPassword;
     private Intent intent;
     private UserApi userApi;
+    private TextView txtAdmin;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +59,16 @@ public class LoginActivity extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         userApi = retrofit.create(UserApi.class);
+
+//        Go to admin page test
+        txtAdmin = findViewById(R.id.tv_to_admin);
+        txtAdmin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this,NewsAdminActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     //Login method

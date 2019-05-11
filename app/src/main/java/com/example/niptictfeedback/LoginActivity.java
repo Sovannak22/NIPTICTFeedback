@@ -32,14 +32,14 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        txtStuId = findViewById(R.id.txt_student_id);
+        txtStuId = findViewById(R.id.txt_id);
         txtPassword = findViewById(R.id.txt_password);
         tvSignup = findViewById(R.id.tv_signup);
         btnLogin = findViewById(R.id.btn_login);
         tvSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this,RegisterActivity.class);
+                intent = new Intent(LoginActivity.this,RegisterActivity.class);
                 startActivity(intent);
             }
         });
@@ -65,15 +65,18 @@ public class LoginActivity extends AppCompatActivity {
         txtAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this,NewsAdminActivity.class);
-                startActivity(intent);
+                intent = new Intent(LoginActivity.this,NewsAdminActivity.class);
+                login();
+                finish();
             }
         });
     }
 
     //Login method
     public void login(){
-        Call<User> call = userApi.loginUser("b20160005","123456","2","Odh9FYiScOCnmwY3jYUdP56r94pqurlkOB8hVCxn","password");
+        String stuId = txtStuId.getText()+"";
+        String password = txtPassword.getText()+"";
+        Call<User> call = userApi.loginUser(stuId,password,"2","l6P1n39KciDaL45ihBbFX2YsdHzqUxQPtzpx70CE","password");
 
         call.enqueue(new Callback<User>() {
             @Override
@@ -84,10 +87,6 @@ public class LoginActivity extends AppCompatActivity {
                 }
 
                 User userResponce = response.body();
-//                String content = "";
-//                content+="Code: "+response.code()+"\n";
-//                content+="Token type: "+userResponce.getToken_type()+"\n";
-//                content+="Access Token: "+userResponce.getAccess_token()+"\n";
                 String tokenType = userResponce.getToken_type();
                 String accessToken = userResponce.getAccess_token();
                 Log.w("Token type:: ",tokenType);

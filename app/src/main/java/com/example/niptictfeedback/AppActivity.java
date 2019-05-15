@@ -7,6 +7,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
 import com.example.niptictfeedback.adapter.page_adapter.PageAdapter;
@@ -17,6 +18,7 @@ public class AppActivity extends AppCompatActivity {
     TabItem homeTabItem,newsTabItem,postTabItem,profileTabItem,notificationTabItem;
     ViewPager viewPager;
     PageAdapter adapter;
+    Toolbar toolbar;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,6 +26,9 @@ public class AppActivity extends AppCompatActivity {
         setContentView(R.layout.activity_app);
         Log.e("Token",""+((MyApplication)this.getApplication()).getAuthorization());
         tabLayout = findViewById(R.id.app_tab_layout);
+
+        toolbar = findViewById(R.id.tool_bar_user);
+        setSupportActionBar(toolbar);
 
         homeTabItem = findViewById(R.id.tab_home);
         newsTabItem = findViewById(R.id.tab_news);

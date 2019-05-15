@@ -8,12 +8,18 @@ import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
+import retrofit2.http.Headers;
 import retrofit2.http.POST;
 
 public interface UserApi {
 
     @GET("users")
     Call<List<User>> getUser();
+
+    @Headers({"Accept: application/json"})
+    @GET("api/get_current_user_info")
+    Call<User> getUserInfo(@Header("Authorization") String header);
 
     @FormUrlEncoded
     @POST("api/register")

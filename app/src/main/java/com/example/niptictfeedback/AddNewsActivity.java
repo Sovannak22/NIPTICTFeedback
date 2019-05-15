@@ -22,6 +22,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -48,6 +49,7 @@ public class AddNewsActivity extends AppCompatActivity {
     Dialog dialog;
     private final int REQUEST_IMAGE_GALLERY = 2,REQUEST_IMAGE_CAPTURE=1;
     ImageView imageUploaded;
+    EditText txtTitle,txtDescription;
     NewsApi newsApi;
     private final int STORAGE_PERMISSION_CODE=3;
 
@@ -60,7 +62,8 @@ public class AddNewsActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         dialog = new Dialog(this);
         imageUploaded = findViewById(R.id.image_upload);
-
+        txtTitle = findViewById(R.id.txt_title);
+        txtDescription = findViewById(R.id.txt_description);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://10.0.2.2:8000/")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -68,29 +71,19 @@ public class AddNewsActivity extends AppCompatActivity {
         newsApi = retrofit.create(NewsApi.class);
     }
 
-//    Convert from uri to path string###############################################################
-    private String getRealPathFromURIPath(Uri contentURI, Activity activity) {
-        Cursor cursor = activity.getContentResolver().query(contentURI, null, null, null, null);
-        if (cursor == null) {
-            return contentURI.getPath();
-        } else {
-            cursor.moveToFirst();
-            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
-            return cursor.getString(idx);
-        }
-    }
 //    sent post request to insert new to the server#################################################
     public void createNews(){
-        RequestBody titlePart = RequestBody.create(MultipartBody.FORM,"Title1111");
-        RequestBody descriptionPart = RequestBody.create(MultipartBody.FORM,"Description 1111");
-        RequestBody placeIdPart = RequestBody.create(MultipartBody.FORM,"1");
+        String title = txtTitle.getText().toString();
+        String description = txtDescription.getText().toString();
+        RequestBody titlePart = RequestBody.create(MultipartBody.FORM,title);
+        RequestBody descriptionPart = RequestBody.create(MultipartBody.FORM,description);
         MultipartBody.Part body=null;
         if (f != null){
             RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), f);
             body = MultipartBody.Part.createFormData("image","fileAndroid", reqFile);
         }
         String auth=((MyApplication) getApplicationContext()).getAuthorization();
-        Call call = newsApi.createNews(auth,body,placeIdPart,titlePart,descriptionPart);
+        Call call = newsApi.createNews(auth,body,titlePart,descriptionPart);
         call.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {

@@ -28,7 +28,6 @@ public interface NewsApi {
     Call<News> createNews(
             @Header("Authorization") String header,
             @Part MultipartBody.Part image,
-            @Part("place_id") RequestBody placeId,
             @Part("title") RequestBody title,
             @Part("description") RequestBody description
     );

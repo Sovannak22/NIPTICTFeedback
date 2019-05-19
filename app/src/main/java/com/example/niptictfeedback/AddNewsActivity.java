@@ -28,6 +28,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.niptictfeedback.apis.NewsApi;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -52,7 +53,7 @@ public class AddNewsActivity extends AppCompatActivity {
     EditText txtTitle,txtDescription;
     NewsApi newsApi;
     private final int STORAGE_PERMISSION_CODE=3;
-
+//    AVLoadingIndicatorView avi;
     File f;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,8 +65,11 @@ public class AddNewsActivity extends AppCompatActivity {
         imageUploaded = findViewById(R.id.image_upload);
         txtTitle = findViewById(R.id.txt_title);
         txtDescription = findViewById(R.id.txt_description);
+//        avi.show();
+//        avi.hide();
+        String baseUrl=((MyApplication) getApplicationContext()).getBaseUrl();
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:8000/")
+                .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         newsApi = retrofit.create(NewsApi.class);
@@ -96,6 +100,7 @@ public class AddNewsActivity extends AppCompatActivity {
                 Intent intent = new Intent(AddNewsActivity.this,NewsAdminActivity.class);
                 startActivity(intent);
                 Toast.makeText(getApplicationContext(),"News has added",Toast.LENGTH_LONG).show();
+//                avi.hide();
                 finish();
             }
 
@@ -120,10 +125,12 @@ public class AddNewsActivity extends AppCompatActivity {
     if (id == R.id.add_news){
             Toast.makeText(getApplicationContext(),"Add new clicked",Toast.LENGTH_LONG).show();
             createNews();
+//            avi.show();
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
+
 
     public void showPopup(View v){
         dialog.setContentView(R.layout.uplaod_image_popup);
@@ -231,7 +238,7 @@ public class AddNewsActivity extends AppCompatActivity {
         f = new File(getApplicationContext().getCacheDir(),"imageToUpload");
         f.createNewFile();
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG,0,byteArrayOutputStream);
+        bitmap.compress(Bitmap.CompressFormat.JPEG,100,byteArrayOutputStream);
         byte[] bitmapData=byteArrayOutputStream.toByteArray();
 
         FileOutputStream fileOutputStream = new FileOutputStream(f);

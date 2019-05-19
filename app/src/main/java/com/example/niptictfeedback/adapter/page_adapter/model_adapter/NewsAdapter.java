@@ -21,6 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.niptictfeedback.MyApplication;
 import com.example.niptictfeedback.R;
 import com.example.niptictfeedback.fragments.NewsInfoFragment;
 import com.example.niptictfeedback.models.News;
@@ -36,10 +37,12 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.MyViewHolder> 
     private View.OnClickListener mOnClickListener;
     private Context context;
     private RecyclerView recyclerView;
+    private String baseUrl;
     public NewsAdapter(List<News> newsList, Context context,RecyclerView recyclerView) {
         this.newsList = newsList;
         this.context = context;
         this.recyclerView = recyclerView;
+        this.baseUrl = ((MyApplication) context.getApplicationContext()).getBaseUrl();
     }
 
     @NonNull
@@ -76,7 +79,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.MyViewHolder> 
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
         myViewHolder.tvTitle.setText(newsList.get(i).getTitle());
         myViewHolder.tvDescription.setText(newsList.get(i).getDescription());
-        Picasso.get().load(newsList.get(i).getImage_url()).into(myViewHolder.imageNews);
+        Picasso.get().load(baseUrl+(newsList.get(i).getImage_url())).into(myViewHolder.imageNews);
     }
 
 

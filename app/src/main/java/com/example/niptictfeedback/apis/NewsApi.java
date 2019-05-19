@@ -18,9 +18,12 @@ import retrofit2.http.Part;
 public interface NewsApi {
 
     @Headers({"Accept: application/json"})
+    @GET("api/news/{id}")
+    Call<List<News>> getNewsWithId(@Header("Authorization") String header);
+
+    @Headers({"Accept: application/json"})
     @GET("api/news")
     Call<List<News>> getNews(@Header("Authorization") String header);
-
 
     @Multipart
     @Headers({"Accept: application/json"})

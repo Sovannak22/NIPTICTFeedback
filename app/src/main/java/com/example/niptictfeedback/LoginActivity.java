@@ -21,6 +21,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.niptictfeedback.apis.UserApi;
 import com.example.niptictfeedback.models.User;
@@ -60,14 +61,19 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if ((txtStuId.getText().toString()).isEmpty() || (txtPassword.getText().toString()).isEmpty()){
+                    Toast.makeText(getApplicationContext(),"Please input all field below",Toast.LENGTH_LONG).show();
+                    return;
+                }
                 login();
 
 
             }
         });
 
+        String baseUrl=((MyApplication) getApplicationContext()).getBaseUrl();
         Retrofit retrofit =new Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:8000/")
+                .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         userApi = retrofit.create(UserApi.class);

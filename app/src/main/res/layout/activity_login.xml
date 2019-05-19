@@ -33,6 +33,8 @@
 
                 <!--Student ID edit text ###########################################################-->
                 <EditText
+                    android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890"
+                    android:inputType="textFilter"
                     android:id="@+id/txt_id"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"

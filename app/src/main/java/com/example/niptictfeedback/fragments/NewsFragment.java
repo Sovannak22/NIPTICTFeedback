@@ -42,13 +42,13 @@ public class NewsFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_news,container,false);
-
-        toolbar = v.findViewById(R.id.toolbar_admin_news);
         news = new ArrayList<>();
         recyclerView = v.findViewById(R.id.rcl_news);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        Retrofit retrofit = new Retrofit.Builder().baseUrl("http://10.0.2.2:8000/")
+
+        String baseUrl=((MyApplication)getActivity().getApplication()).getBaseUrl();
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 

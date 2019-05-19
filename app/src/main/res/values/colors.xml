@@ -3,6 +3,6 @@
     <color name="colorPrimary">#0022ff</color>
     <color name="colorPrimaryDark">#00004a</color>
     <color name="colorAccent">#fff</color>
-    <color name="hintColor">#8f9c8c</color>
     <color name="textColorAlert">#AA0000</color>
+    <color name="hintColor">#8f9c8c</color>
 </resources>

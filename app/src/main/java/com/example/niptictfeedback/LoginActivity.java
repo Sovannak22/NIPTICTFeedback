@@ -110,7 +110,8 @@ public class LoginActivity extends AppCompatActivity {
                 if (!response.isSuccessful()){
                     showPopupIncorrectIdOrPassword();
                     Log.w("Login:: ",response.code()+""+response.message());
-
+                    lodingBackground.setVisibility(View.GONE);
+                    rotateLoading.stop();
                     return;
                 }
 
@@ -127,6 +128,8 @@ public class LoginActivity extends AppCompatActivity {
             public void onFailure(Call<User> call, Throwable t) {
                 showPopupLoginFail();
                 Log.w("Register fail::",t.getMessage());
+                lodingBackground.setVisibility(View.GONE);
+                rotateLoading.stop();
             }
         });
     }

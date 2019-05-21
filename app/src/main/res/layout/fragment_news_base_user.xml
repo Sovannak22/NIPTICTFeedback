@@ -13,21 +13,21 @@
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:text="Dorm"
-            android:background="@drawable/blue_white_background"
+            android:background="@drawable/blue_white_without_radius"
             android:textSize="@dimen/text_size"
             android:textColor="@color/colorAccent"
             android:padding="@dimen/paddingSize"
-            android:layout_marginHorizontal="@dimen/paddingSize"/>
+            android:layout_marginLeft="@dimen/paddingSize"/>
         <Button
             android:id="@+id/btn_canteen_news_user"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:text="Canteen"
-            android:background="@drawable/white_round_background"
+            android:background="@drawable/white_blue_background_without_radius"
             android:textSize="@dimen/text_size"
             android:textColor="@color/colorPrimary"
             android:padding="@dimen/paddingSize"
-            android:layout_marginHorizontal="@dimen/paddingSize"/>
+            android:layout_marginRight="@dimen/paddingSize"/>
     </LinearLayout>
     <LinearLayout
         android:id="@+id/news_user_container"

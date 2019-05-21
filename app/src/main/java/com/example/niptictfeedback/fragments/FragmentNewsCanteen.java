@@ -10,7 +10,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
+import com.emredavarci.noty.Noty;
 import com.example.niptictfeedback.MyApplication;
 import com.example.niptictfeedback.R;
 import com.example.niptictfeedback.adapter.page_adapter.model_adapter.NewsAdapter;
@@ -26,53 +28,66 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class NewsDormFragment extends Fragment {
-
-    RecyclerView recyclerView;
-    NewsAdapter newsAdapter;
-    List<News> news;
-    public NewsDormFragment() {
-    }
+public class FragmentNewsCanteen extends Fragment {
+    private NewsApi newsApi;
+    private LinearLayout alertPopUp;
+    private RecyclerView recyclerView;
+    private NewsAdapter newsAdapter;
+    private List<News> news;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-        View view = inflater.inflate(R.layout.fragment_news,container,false);
-
         View v = inflater.inflate(R.layout.fragment_news,container,false);
+
+        alertPopUp = v.findViewById(R.id.alert_popup_user_news);
         news = new ArrayList<>();
         recyclerView = v.findViewById(R.id.rcl_news_user);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         String baseUrl=((MyApplication)getActivity().getApplication()).getBaseUrl();
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(baseUrl)
+        Retrofit retrofit =new Retrofit.Builder()
+                .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
+        newsApi = retrofit.create(NewsApi.class);
+        getNews();
+        return v;
 
-        NewsApi newsApi = retrofit.create(NewsApi.class);
-        String auth=((MyApplication)getActivity().getApplication()).getAuthorization();
-        Call<List<News>> call = newsApi.getNewsWithId(auth,1);
+
+    }
+
+    public void getNews(){
+        String auth=((MyApplication) getActivity().getApplication()).getAuthorization();
+        Call<List<News>> call = newsApi.getNews(auth);
         call.enqueue(new Callback<List<News>>() {
             @Override
             public void onResponse(Call<List<News>> call, Response<List<News>> response) {
                 if (!response.isSuccessful()){
-                    Log.w("Call ::",response.body()+"");
-                    return;
+                    Noty.init(getContext(), "Oops something went wrong!", alertPopUp,
+                            Noty.WarningStyle.SIMPLE)
+                            .setAnimation(Noty.RevealAnim.SLIDE_UP, Noty.DismissAnim.BACK_TO_BOTTOM, 400,400)
+                            .setWarningInset(0,0,0,0)
+                            .setWarningBoxRadius(0,0,0,0)
+                            .show();
+                    Log.e("Getnews::","!success");
                 }
                 news= response.body();
-                Log.w("imageUrl:: ",news.get(0).getImage_url());
                 newsAdapter = new NewsAdapter(news,getContext(),recyclerView);
                 recyclerView.setAdapter(newsAdapter);
             }
 
             @Override
             public void onFailure(Call<List<News>> call, Throwable t) {
-                Log.w("Error",t.getMessage());
+                Log.e("Get news::","Fail");
+                Noty.init(getContext(), "No internet connection!", alertPopUp,
+                        Noty.WarningStyle.SIMPLE)
+                        .setAnimation(Noty.RevealAnim.SLIDE_UP, Noty.DismissAnim.BACK_TO_BOTTOM, 400,400)
+                        .setWarningInset(0,0,0,0)
+                        .setWarningBoxRadius(0,0,0,0)
+                        .show();
             }
         });
-
-        return view;
     }
 }

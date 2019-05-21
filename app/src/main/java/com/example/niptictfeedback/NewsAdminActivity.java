@@ -32,7 +32,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class NewsAdminActivity extends AppCompatActivity {
 
     Toolbar toolbar;
-    NewsApi newsApi;
+    private NewsApi newsApi;
     private LinearLayout alertPopUp;
     private RecyclerView recyclerView;
     private NewsAdapter newsAdapter;

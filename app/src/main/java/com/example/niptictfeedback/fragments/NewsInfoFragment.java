@@ -31,7 +31,6 @@ public class NewsInfoFragment extends Fragment {
         imgNews = v.findViewById(R.id.img_news);
         tvTitle = v.findViewById(R.id.tv_title);
         tvDescription = v.findViewById(R.id.tv_description);
-        tvClose = v.findViewById(R.id.tv_x);
         tvTitle.setText(tilte);
         tvDescription.setText(description);
         Picasso.get().load(imageUrl).into(imgNews);

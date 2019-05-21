@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.example.niptictfeedback.apis.UserApi;
 import com.example.niptictfeedback.models.User;
+import com.victor.loading.rotate.RotateLoading;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -41,6 +42,8 @@ public class LoginActivity extends AppCompatActivity {
     private UserApi userApi;
     private TextView txtAdmin;
     private Dialog dialog;
+    private RotateLoading rotateLoading;
+    private LinearLayout lodingBackground;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +53,9 @@ public class LoginActivity extends AppCompatActivity {
         txtPassword = findViewById(R.id.txt_password);
         tvSignup = findViewById(R.id.tv_signup);
         btnLogin = findViewById(R.id.btn_login);
+        rotateLoading = findViewById(R.id.rotate_loading_login);
+        lodingBackground = findViewById(R.id.loding_bg_login);
+        lodingBackground.setVisibility(View.GONE);
         tvSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,6 +71,8 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),"Please input all field below",Toast.LENGTH_LONG).show();
                     return;
                 }
+                lodingBackground.setVisibility(View.VISIBLE);
+                rotateLoading.start();
                 login();
 
 
@@ -112,7 +120,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 ((MyApplication) getApplicationContext()).setAuthorization(tokenType+" "+accessToken);
                 getUserInfo();
-                finish();
+//                finish();
             }
 
             @Override
@@ -137,7 +145,9 @@ public class LoginActivity extends AppCompatActivity {
                 User userResponce = response.body();
                 Log.w("user",""+userResponce.getUser_role_id());
                 loginDirect(userResponce);
+                rotateLoading.stop();
                 startActivity(intent);
+                finish();
             }
 
             @Override

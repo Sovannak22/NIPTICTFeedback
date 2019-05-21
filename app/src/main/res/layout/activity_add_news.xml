@@ -127,11 +127,10 @@
                 android:layout_height="150dp" />
         </LinearLayout>
     </LinearLayout>
-    <com.wang.avi.AVLoadingIndicatorView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:indicatorName="BallPulseIndicator"
-        app:indicatorColor="@color/hintColor"
-        android:layout_centerInParent="true"
-        />
+    <com.victor.loading.rotate.RotateLoading
+        android:id="@+id/rotate_loading_addnews"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:loading_color="@color/colorPrimary"
+        android:layout_centerInParent="true"/>
 </RelativeLayout>

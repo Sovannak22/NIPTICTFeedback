@@ -28,7 +28,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.niptictfeedback.apis.NewsApi;
-import com.wang.avi.AVLoadingIndicatorView;
+import com.victor.loading.rotate.RotateLoading;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -53,8 +53,8 @@ public class AddNewsActivity extends AppCompatActivity {
     EditText txtTitle,txtDescription;
     NewsApi newsApi;
     private final int STORAGE_PERMISSION_CODE=3;
-//    AVLoadingIndicatorView avi;
     File f;
+    RotateLoading rotateLoading;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,8 +65,7 @@ public class AddNewsActivity extends AppCompatActivity {
         imageUploaded = findViewById(R.id.image_upload);
         txtTitle = findViewById(R.id.txt_title);
         txtDescription = findViewById(R.id.txt_description);
-//        avi.show();
-//        avi.hide();
+        rotateLoading = findViewById(R.id.rotate_loading_addnews);
         String baseUrl=((MyApplication) getApplicationContext()).getBaseUrl();
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(baseUrl)
@@ -100,7 +99,7 @@ public class AddNewsActivity extends AppCompatActivity {
                 Intent intent = new Intent(AddNewsActivity.this,NewsAdminActivity.class);
                 startActivity(intent);
                 Toast.makeText(getApplicationContext(),"News has added",Toast.LENGTH_LONG).show();
-//                avi.hide();
+                rotateLoading.stop();
                 finish();
             }
 
@@ -124,8 +123,8 @@ public class AddNewsActivity extends AppCompatActivity {
 
     if (id == R.id.add_news){
             Toast.makeText(getApplicationContext(),"Add new clicked",Toast.LENGTH_LONG).show();
+            rotateLoading.start();
             createNews();
-//            avi.show();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -171,6 +170,7 @@ public class AddNewsActivity extends AppCompatActivity {
                 Log.e("Upload image:: ","Camera");
                 try {
                     convertBitToBite(bitmap);
+                    dialog.dismiss();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -184,9 +184,11 @@ public class AddNewsActivity extends AppCompatActivity {
                     bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(),uri);
                     imageUploaded.setImageBitmap(bitmap);
                     Log.e("Upload image:: ","Gallerry");
-                    convertBitToBite(bitmap);
+                    Bitmap bitmapResize = Bitmap.createScaledBitmap(bitmap,1000,750,true);
+                    convertBitToBite(bitmapResize);
                     dialog.dismiss();
                 } catch (IOException e) {
+                    Log.e("Error gallerry::","Error ");
                     e.printStackTrace();
                 }
             }

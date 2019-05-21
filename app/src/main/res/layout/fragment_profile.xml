@@ -17,9 +17,12 @@
             android:id="@+id/picid"
             android:layout_width="120dp"
             android:layout_height="120dp"
-            android:src="@drawable/default_profile"
             android:layout_marginTop="-30dp"
-            />
+            android:src="@drawable/default_profile" />
+
+
+
+
         <!--<ImageView-->
             <!--android:id="@+id/imgView_profile"-->
             <!--android:layout_gravity="center_horizontal"-->
@@ -39,6 +42,21 @@
             android:textColor="@color/colorAccent"
             android:textSize="21sp"
             android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/camera_profile"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="55dp"
+            android:layout_marginRight="@dimen/paddingSize"
+            android:src="@drawable/camera_edit" />
+        <!--<ImageView-->
+            <!--android:layout_width="30dp"-->
+            <!--android:layout_height="30dp"-->
+            <!--android:src="@drawable/edit"-->
+           <!--/>-->
+
+
     </RelativeLayout>
 
     <android.support.design.widget.TabLayout
@@ -51,8 +69,9 @@
         app:tabSelectedTextColor="@color/colorPrimary"
         app:tabRippleColor="@color/colorPrimary"
         app:tabTextColor="#000"
-        android:background="@color/colorAccent"
-        >
+        android:background="@color/colorAccent">
+
+
         <android.support.design.widget.TabItem
             android:id="@+id/tab_public"
             android:layout_width="wrap_content"
@@ -82,4 +101,12 @@
         android:layout_height="200dp">
 
     </android.support.v4.view.ViewPager>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/edit_infor"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="215dp"
+        android:layout_marginLeft="365dp"
+        android:src="@drawable/edit_pro" />
 </RelativeLayout>

@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".AddNewsActivity"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,7 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/colorPrimaryDark"
-            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"></android.support.v7.widget.Toolbar>
+            ></android.support.v7.widget.Toolbar>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -29,7 +27,7 @@
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:src="@drawable/zidane"
+                android:src="@drawable/profile_notifi"
                 app:civ_border_width="2dp"
                 app:civ_border_color="#FF000000"
                 />
@@ -42,32 +40,34 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/hintColor"
                     android:textSize="@dimen/text_size"
-                    android:text="Admin name"
+                    android:text="Feedback to Dormitory"
                     android:layout_margin="@dimen/paddingSize"
                     android:textStyle="bold"/>
-                <TextView
+                <LinearLayout
+                    android:gravity="center"
+                    android:orientation="horizontal"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Write news to place"
-                    android:textSize="@dimen/textSizeSmall"
-                    android:textColor="@color/hintColor"
-                    android:layout_marginHorizontal="@dimen/paddingSize"/>
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_address" />
+
+                    <TextView
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/paddingSize"
+                        android:text="Private"
+                        android:textColor="@color/hintColor"
+                        android:textSize="@dimen/textSizeSmall" />
+
+                </LinearLayout>
+
             </LinearLayout>
         </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
-            <EditText
-                android:id="@+id/txt_title"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/white_round_background"
-                android:layout_margin="@dimen/paddingSize"
-                android:paddingHorizontal="@dimen/paddingSize"
-                android:hint="Write new title here"
-                android:textColor="@color/colorPrimary"/>
-        </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -127,11 +127,5 @@
                 android:layout_height="150dp" />
         </LinearLayout>
     </LinearLayout>
-    <!--<com.wang.avi.AVLoadingIndicatorView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--app:indicatorName="BallPulseIndicator"-->
-        <!--app:indicatorColor="@color/hintColor"-->
-        <!--android:layout_centerInParent="true"-->
-        <!--/>-->
+
 </RelativeLayout>

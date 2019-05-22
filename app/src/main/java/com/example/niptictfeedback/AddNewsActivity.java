@@ -28,6 +28,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.niptictfeedback.apis.NewsApi;
+import com.victor.loading.rotate.RotateLoading;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -52,20 +53,24 @@ public class AddNewsActivity extends AppCompatActivity {
     EditText txtTitle,txtDescription;
     NewsApi newsApi;
     private final int STORAGE_PERMISSION_CODE=3;
-
     File f;
+    RotateLoading rotateLoading;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_news);
+
         toolbar = findViewById(R.id.toolbar_admin_news);
         setSupportActionBar(toolbar);
+
         dialog = new Dialog(this);
         imageUploaded = findViewById(R.id.image_upload);
         txtTitle = findViewById(R.id.txt_title);
         txtDescription = findViewById(R.id.txt_description);
+        rotateLoading = findViewById(R.id.rotate_loading_addnews);
+        String baseUrl=((MyApplication) getApplicationContext()).getBaseUrl();
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:8000/")
+                .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         newsApi = retrofit.create(NewsApi.class);
@@ -96,6 +101,7 @@ public class AddNewsActivity extends AppCompatActivity {
                 Intent intent = new Intent(AddNewsActivity.this,NewsAdminActivity.class);
                 startActivity(intent);
                 Toast.makeText(getApplicationContext(),"News has added",Toast.LENGTH_LONG).show();
+                rotateLoading.stop();
                 finish();
             }
 
@@ -119,11 +125,13 @@ public class AddNewsActivity extends AppCompatActivity {
 
     if (id == R.id.add_news){
             Toast.makeText(getApplicationContext(),"Add new clicked",Toast.LENGTH_LONG).show();
+            rotateLoading.start();
             createNews();
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
+
 
     public void showPopup(View v){
         dialog.setContentView(R.layout.uplaod_image_popup);
@@ -164,6 +172,7 @@ public class AddNewsActivity extends AppCompatActivity {
                 Log.e("Upload image:: ","Camera");
                 try {
                     convertBitToBite(bitmap);
+                    dialog.dismiss();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -177,9 +186,11 @@ public class AddNewsActivity extends AppCompatActivity {
                     bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(),uri);
                     imageUploaded.setImageBitmap(bitmap);
                     Log.e("Upload image:: ","Gallerry");
-                    convertBitToBite(bitmap);
+                    Bitmap bitmapResize = Bitmap.createScaledBitmap(bitmap,1000,750,true);
+                    convertBitToBite(bitmapResize);
                     dialog.dismiss();
                 } catch (IOException e) {
+                    Log.e("Error gallerry::","Error ");
                     e.printStackTrace();
                 }
             }
@@ -231,7 +242,7 @@ public class AddNewsActivity extends AppCompatActivity {
         f = new File(getApplicationContext().getCacheDir(),"imageToUpload");
         f.createNewFile();
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG,0,byteArrayOutputStream);
+        bitmap.compress(Bitmap.CompressFormat.JPEG,100,byteArrayOutputStream);
         byte[] bitmapData=byteArrayOutputStream.toByteArray();
 
         FileOutputStream fileOutputStream = new FileOutputStream(f);

@@ -81,8 +81,9 @@ public class RegisterActivity extends AppCompatActivity {
                 stuId = txtStudentId.getText().toString();
                 password = txtPassword.getText().toString();
                 cPassword = txtCPassword.getText().toString();
-                //        Test cPassword and Password
+                //Test cPassword and Password
                 if (password.equals(cPassword)){
+                    Log.e("compare::","Password:"+password+",Cpassword: "+cPassword);
                     addListenerButton();
                     createPost();
                 }
@@ -90,7 +91,7 @@ public class RegisterActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),"Password and Comfirm password must be the same",Toast.LENGTH_LONG).show();
                     Log.e("compare:: ","0");
                 }
-                Log.e("compare::","Password:"+password+",Cpassword: "+cPassword);
+
             }
         });
 
@@ -107,7 +108,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if (!response.isSuccessful()){
-//    Add radio box lister
+        //Add radio box lister
 
                     Log.w("Register:: ",response.code()+""+response.message());
                     return;

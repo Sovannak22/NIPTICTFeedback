@@ -7,12 +7,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.emredavarci.noty.Noty;
 import com.example.niptictfeedback.adapter.page_adapter.model_adapter.NewsAdapter;
 import com.example.niptictfeedback.apis.NewsApi;
 import com.example.niptictfeedback.models.News;
@@ -26,47 +28,68 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+
 public class NewsAdminActivity extends AppCompatActivity {
 
     Toolbar toolbar;
-    RecyclerView recyclerView;
-    NewsAdapter newsAdapter;
-    List<News> news;
-
+    NewsApi newsApi;
+    private LinearLayout alertPopUp;
+    private RecyclerView recyclerView;
+    private NewsAdapter newsAdapter;
+    private List<News> news;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_admin);
-
         toolbar = findViewById(R.id.toolbar_admin_news);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        alertPopUp = findViewById(R.id.alert_popup_admin_news);
         news = new ArrayList<>();
-        recyclerView = findViewById(R.id.rcl_news);
+        recyclerView = findViewById(R.id.rcl_news_admin);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        Retrofit retrofit = new Retrofit.Builder().baseUrl("http://10.0.2.2:8000/")
+
+        String baseUrl=((MyApplication) getApplicationContext()).getBaseUrl();
+        Retrofit retrofit =new Retrofit.Builder()
+                .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
+        newsApi = retrofit.create(NewsApi.class);
+        getNews();
+    }
 
-        NewsApi newsApi = retrofit.create(NewsApi.class);
+    public void getNews(){
         String auth=((MyApplication) getApplicationContext()).getAuthorization();
         Call<List<News>> call = newsApi.getNews(auth);
         call.enqueue(new Callback<List<News>>() {
             @Override
             public void onResponse(Call<List<News>> call, Response<List<News>> response) {
                 if (!response.isSuccessful()){
-                    Log.w("Call ::",response.body()+"");
-                    return;
+                    Noty.init(NewsAdminActivity.this, "Oops something went wrong!", alertPopUp,
+                            Noty.WarningStyle.SIMPLE)
+                            .setAnimation(Noty.RevealAnim.SLIDE_UP, Noty.DismissAnim.BACK_TO_BOTTOM, 400,400)
+                            .setWarningInset(0,0,0,0)
+                            .setWarningBoxRadius(0,0,0,0)
+                            .show();
+                    Log.e("Getnews::","!success");
                 }
                 news= response.body();
-                Log.w("imageUrl:: ",news.get(0).getImage_url());
                 newsAdapter = new NewsAdapter(news,NewsAdminActivity.this,recyclerView);
                 recyclerView.setAdapter(newsAdapter);
             }
 
             @Override
             public void onFailure(Call<List<News>> call, Throwable t) {
-                Log.w("Error",t.getMessage());
+                Log.e("Get news::","Fail");
+                Noty.init(NewsAdminActivity.this, "No internet connection!", alertPopUp,
+                        Noty.WarningStyle.SIMPLE)
+                        .setAnimation(Noty.RevealAnim.SLIDE_UP, Noty.DismissAnim.BACK_TO_BOTTOM, 400,400)
+                        .setWarningInset(0,0,0,0)
+                        .setWarningBoxRadius(0,0,0,0)
+                        .show();
             }
         });
     }
@@ -86,8 +109,15 @@ public class NewsAdminActivity extends AppCompatActivity {
         if (id == R.id.add_news){
             Intent intent = new Intent(NewsAdminActivity.this,AddNewsActivity.class);
             startActivity(intent);
+            finish();
             return true;
         }
-            return super.onOptionsItemSelected(item);
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 }

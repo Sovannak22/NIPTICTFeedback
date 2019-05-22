@@ -4,27 +4,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.example.niptictfeedback.MyApplication;
+import com.example.niptictfeedback.NewInfoActivity;
 import com.example.niptictfeedback.R;
-import com.example.niptictfeedback.fragments.NewsInfoFragment;
 import com.example.niptictfeedback.models.News;
-import com.example.niptictfeedback.models.User;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
@@ -36,10 +29,12 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.MyViewHolder> 
     private View.OnClickListener mOnClickListener;
     private Context context;
     private RecyclerView recyclerView;
+    private String baseUrl;
     public NewsAdapter(List<News> newsList, Context context,RecyclerView recyclerView) {
         this.newsList = newsList;
         this.context = context;
         this.recyclerView = recyclerView;
+        this.baseUrl = ((MyApplication) context.getApplicationContext()).getBaseUrl();
     }
 
     @NonNull
@@ -53,20 +48,17 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.MyViewHolder> 
                 AppCompatActivity appCompatActivity  = (AppCompatActivity)v.getContext();
                 int itemPos = recyclerView.getChildLayoutPosition(v);
                 News news = newsList.get(itemPos);
-                NewsInfoFragment newsInfoFragment = new NewsInfoFragment();
-                Bundle args = new Bundle();
-                args.putString("ImageUrl",news.getImage_url());
-                args.putString("Title",news.getTitle());
-                args.putString("Description",news.getDescription());
-                newsInfoFragment.setArguments(args);
-                FragmentManager fm = appCompatActivity.getSupportFragmentManager();
-                FragmentTransaction ft = fm.beginTransaction();
-                fm.beginTransaction();
-                newsInfoFragment.setArguments(args);
-                ft.add(R.id.fragment_news_container,newsInfoFragment);
-                ft.commit();
+
+                Intent intent = new Intent(context, NewInfoActivity.class);
+                intent.putExtra("ImageUrl",news.getImage_url());
+                intent.putExtra("Title",news.getTitle());
+                intent.putExtra("Description",news.getDescription());
+                context.startActivity(intent);
+
+
             }
         };
+
         myView.setOnClickListener(mOnClickListener);
         return new MyViewHolder(myView);
 
@@ -76,7 +68,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.MyViewHolder> 
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
         myViewHolder.tvTitle.setText(newsList.get(i).getTitle());
         myViewHolder.tvDescription.setText(newsList.get(i).getDescription());
-        Picasso.get().load(newsList.get(i).getImage_url()).into(myViewHolder.imageNews);
+        Picasso.get().load(baseUrl+(newsList.get(i).getImage_url())).into(myViewHolder.imageNews);
     }
 
 

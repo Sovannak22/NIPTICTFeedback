@@ -11,12 +11,15 @@
         android:roundIcon="@drawable/ic_feedback"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".HomeAdmin"></activity>
+        <activity android:name=".NewInfoActivity"></activity>
+        <activity android:name=".HomeAdmin" />
         <activity android:name=".AddNewsActivity" />
         <activity android:name=".RegisterActivity"></activity>
         <activity android:name=".LoginActivity" />
         <activity android:name=".AppActivity"></activity>
-        <activity android:name=".EditProfileInforActivity"></activity>
+        <activity android:name=".EditProfileInforActivity"
+
+           ></activity>
         <activity android:name=".NewsAdminActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>

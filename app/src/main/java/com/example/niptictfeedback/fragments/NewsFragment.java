@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.example.niptictfeedback.MyApplication;
 import com.example.niptictfeedback.NewsAdminActivity;
@@ -30,47 +31,37 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class NewsFragment extends Fragment {
-    Toolbar toolbar;
     RecyclerView recyclerView;
     NewsAdapter newsAdapter;
     List<News> news;
-
+    private Button btnDorm,btnCanteen;
     public NewsFragment() {
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_news,container,false);
+        View v = inflater.inflate(R.layout.fragment_news_base_user,container,false);
+        btnDorm = v.findViewById(R.id.btn_dorm_news_user);
+        btnCanteen = v.findViewById(R.id.btn_canteen_news_user);
 
-        toolbar = v.findViewById(R.id.toolbar_admin_news);
-        news = new ArrayList<>();
-        recyclerView = v.findViewById(R.id.rcl_news);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        Retrofit retrofit = new Retrofit.Builder().baseUrl("http://10.0.2.2:8000/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        NewsApi newsApi = retrofit.create(NewsApi.class);
-        String auth=((MyApplication)getActivity().getApplication()).getAuthorization();
-        Call<List<News>> call = newsApi.getNews(auth);
-        call.enqueue(new Callback<List<News>>() {
+        btnDorm.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onResponse(Call<List<News>> call, Response<List<News>> response) {
-                if (!response.isSuccessful()){
-                    Log.w("Call ::",response.body()+"");
-                    return;
-                }
-                news= response.body();
-                Log.w("imageUrl:: ",news.get(0).getImage_url());
-                newsAdapter = new NewsAdapter(news,getContext(),recyclerView);
-                recyclerView.setAdapter(newsAdapter);
+            public void onClick(View v) {
+                btnDorm.setBackground(getResources().getDrawable(R.drawable.blue_white_background));
+                btnCanteen.setBackground(getResources().getDrawable(R.drawable.white_round_background));
+                btnDorm.setTextColor(getResources().getColor(R.color.colorAccent));
+                btnCanteen.setTextColor(getResources().getColor(R.color.colorPrimary));
+
             }
-
+        });
+        btnCanteen.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onFailure(Call<List<News>> call, Throwable t) {
-                Log.w("Error",t.getMessage());
+            public void onClick(View v) {
+                btnDorm.setBackground(getResources().getDrawable(R.drawable.white_round_background));
+                btnCanteen.setBackground(getResources().getDrawable(R.drawable.blue_white_background));
+                btnDorm.setTextColor(getResources().getColor(R.color.colorPrimary));
+                btnCanteen.setTextColor(getResources().getColor(R.color.colorAccent));
             }
         });
         return v;

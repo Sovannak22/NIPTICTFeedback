@@ -4,6 +4,11 @@
 
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <!--<android.support.v7.widget.Toolbar-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content">-->
+        <!---->
+    <!--</android.support.v7.widget.Toolbar>-->
 
     <RelativeLayout
         android:id="@+id/appbar_id"
@@ -20,16 +25,6 @@
             android:layout_marginTop="-30dp"
             android:src="@drawable/default_profile" />
 
-
-
-
-        <!--<ImageView-->
-            <!--android:id="@+id/imgView_profile"-->
-            <!--android:layout_gravity="center_horizontal"-->
-            <!--android:layout_marginTop="1dp"-->
-            <!--android:layout_width="120dp"-->
-            <!--android:layout_height="120dp"-->
-            <!--android:src="@drawable/default_profile"/>-->
         <TextView
 
             android:id="@+id/tvProfile_name"
@@ -50,11 +45,6 @@
             android:layout_marginTop="55dp"
             android:layout_marginRight="@dimen/paddingSize"
             android:src="@drawable/camera_edit" />
-        <!--<ImageView-->
-            <!--android:layout_width="30dp"-->
-            <!--android:layout_height="30dp"-->
-            <!--android:src="@drawable/edit"-->
-           <!--/>-->
 
 
     </RelativeLayout>
@@ -102,11 +92,11 @@
 
     </android.support.v4.view.ViewPager>
 
-    <de.hdodenhof.circleimageview.CircleImageView
+    <ImageView
         android:id="@+id/edit_infor"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginTop="215dp"
+        android:layout_marginTop="213dp"
         android:layout_marginLeft="365dp"
-        android:src="@drawable/edit_pro" />
+        android:src="@drawable/edit_pro"/>
 </RelativeLayout>

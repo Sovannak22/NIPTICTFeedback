@@ -4,14 +4,34 @@
     android:layout_height="match_parent">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:gravity="center">
-        <TextView
-            android:textColor="@color/colorPrimary"
-            android:layout_width="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/paddingSize">
+        <Button
+            android:id="@+id/btn_dorm_home_user"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:text="Home page"
-            android:textSize="@dimen/text_size"/>
+            android:text="Dorm"
+            android:background="@drawable/blue_white_without_radius"
+            android:textSize="@dimen/textSizeSmall"
+            android:textColor="@color/colorAccent"
+            android:layout_marginLeft="@dimen/paddingSize"/>
+        <Button
+            android:id="@+id/btn_canteen_home_user"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:text="Canteen"
+            android:background="@drawable/white_blue_background_without_radius"
+            android:textSize="@dimen/textSizeSmall"
+            android:textColor="@color/colorPrimary"
+            android:layout_marginRight="@dimen/paddingSize"/>
     </LinearLayout>
+    <LinearLayout
+        android:background="@color/hintColor"
+        android:id="@+id/feedbacks_user_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"></LinearLayout>
 </LinearLayout>

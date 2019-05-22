@@ -14,16 +14,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.example.niptictfeedback.R;
-import com.example.niptictfeedback.adapter.page_adapter.model_adapter.NewsAdapter;
 
-import com.example.niptictfeedback.models.News;
-
-import java.util.List;
 
 public class NewsFragment extends Fragment {
-    RecyclerView recyclerView;
-    NewsAdapter newsAdapter;
-    List<News> news;
+
     private Button btnDorm,btnCanteen;
     public NewsFragment() {
     }

@@ -8,7 +8,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -23,9 +22,10 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.niptictfeedback.apis.NewsApi;
+import com.example.niptictfeedback.apis.FeedbackApi;
 import com.victor.loading.rotate.RotateLoading;
 
 import java.io.ByteArrayOutputStream;
@@ -42,71 +42,64 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class AddNewsActivity extends AppCompatActivity {
+public class CreatePostActivity extends AppCompatActivity {
 
-    Toolbar toolbar;
-    Dialog dialog;
+    private Intent intent;
+    private TextView tvPlace;
+    private Toolbar toolbar;
+    private LinearLayout btnPrivacy,btnUploadPic,backgroundLoading;
+    private FeedbackApi feedbackApi;
+    private EditText txtTitle,txtDescription;
+    private ImageView imageUploaded;
+    private Dialog dialog;
+    //Request code for select image or open camera dialog
     private final int REQUEST_IMAGE_GALLERY = 2,REQUEST_IMAGE_CAPTURE=1;
-    ImageView imageUploaded;
-    EditText txtTitle,txtDescription;
-    NewsApi newsApi;
     private final int STORAGE_PERMISSION_CODE=3;
-    File f;
-    RotateLoading rotateLoading;
+
+    private File f;
+
+    private RotateLoading rotateLoading;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_news);
-        toolbar = findViewById(R.id.toolbar_admin_news);
-        setSupportActionBar(toolbar);
+        setContentView(R.layout.activity_create_post);
+        intent = getIntent();
+        tvPlace = findViewById(R.id.tv_place_create_post);
+        toolbar = findViewById(R.id.tool_bar_create_post);
+        btnPrivacy = findViewById(R.id.btn_privacy_create_post);
+        btnUploadPic = findViewById(R.id.upload_pic_add_feedback);
+        txtTitle = findViewById(R.id.txt_title_add_feedback);
+        txtDescription = findViewById(R.id.txt_description_add_feedback);
+        imageUploaded = findViewById(R.id.image_upload_add_feedback);
+        backgroundLoading = findViewById(R.id.loading_background_add_feedback);
+        backgroundLoading.setVisibility(View.GONE);
+        rotateLoading = findViewById(R.id.rotate_loading_add_feedback);
+
         dialog = new Dialog(this);
-        imageUploaded = findViewById(R.id.image_upload);
-        txtTitle = findViewById(R.id.txt_title);
-        txtDescription = findViewById(R.id.txt_description);
-        rotateLoading = findViewById(R.id.rotate_loading_addnews);
+
+        tvPlace.setText(intent.getStringExtra("Place"));
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        btnPrivacy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CreatePostActivity.this,SelectPrivacyActivity.class);
+                startActivity(intent);
+            }
+        });
+
         String baseUrl=((MyApplication) getApplicationContext()).getBaseUrl();
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        newsApi = retrofit.create(NewsApi.class);
+        feedbackApi = retrofit.create(FeedbackApi.class);
+
     }
 
-//    sent post request to insert new to the server#################################################
-    public void createNews(){
-        String title = txtTitle.getText().toString();
-        String description = txtDescription.getText().toString();
-        RequestBody titlePart = RequestBody.create(MultipartBody.FORM,title);
-        RequestBody descriptionPart = RequestBody.create(MultipartBody.FORM,description);
-        MultipartBody.Part body=null;
-        if (f != null){
-            RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), f);
-            body = MultipartBody.Part.createFormData("image","fileAndroid", reqFile);
-        }
-        String auth=((MyApplication) getApplicationContext()).getAuthorization();
-        Call call = newsApi.createNews(auth,body,titlePart,descriptionPart);
-        call.enqueue(new Callback() {
-            @Override
-            public void onResponse(Call call, Response response) {
-                if (!response.isSuccessful()){
-                    Log.w("Register:: ",response.code()+""+response.message());
-                    return;
-                }
-
-                Log.w("Register:: ","Successfully "+response);
-                Intent intent = new Intent(AddNewsActivity.this,NewsAdminActivity.class);
-                startActivity(intent);
-                Toast.makeText(getApplicationContext(),"News has added",Toast.LENGTH_LONG).show();
-                rotateLoading.stop();
-                finish();
-            }
-
-            @Override
-            public void onFailure(Call call, Throwable t) {
-                Log.w("Register fail::",t.getMessage());
-            }
-        });
-    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -119,16 +112,58 @@ public class AddNewsActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-    if (id == R.id.add_news){
+        if (id == R.id.add_news){
             Toast.makeText(getApplicationContext(),"Add new clicked",Toast.LENGTH_LONG).show();
+            backgroundLoading.setVisibility(View.VISIBLE);
             rotateLoading.start();
-            createNews();
+            createFeedback();
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
+    public void createFeedback(){
+        String title = txtTitle.getText().toString();
+        String description = txtDescription.getText().toString();
+        RequestBody titlePart = RequestBody.create(MultipartBody.FORM,title);
+        RequestBody descriptionPart = RequestBody.create(MultipartBody.FORM,description);
+        RequestBody placeIdPart = RequestBody.create(MultipartBody.FORM,intent.getStringExtra("PlaceId"));
+        RequestBody feedbackTypeIdPart = RequestBody.create(MultipartBody.FORM,"1");
+        MultipartBody.Part body=null;
+        if (f != null){
+            RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), f);
+            body = MultipartBody.Part.createFormData("img","fileAndroid", reqFile);
+        }
+        String auth=((MyApplication) getApplicationContext()).getAuthorization();
+        Call call = feedbackApi.createFeedback(auth,body,titlePart,descriptionPart,placeIdPart,feedbackTypeIdPart);
+        call.enqueue(new Callback() {
+            @Override
+            public void onResponse(Call call, Response response) {
+                if (!response.isSuccessful()){
+                    Log.w("Register:: ",response.code()+""+response.message());
+                    rotateLoading.stop();
+                    backgroundLoading.setVisibility(View.GONE);
+                    return;
+                }
 
+                Log.w("Register:: ","Successfully "+response);
+                Intent intent = new Intent(CreatePostActivity.this,AppActivity.class);
+                startActivity(intent);
+                Toast.makeText(getApplicationContext(),"News has added",Toast.LENGTH_LONG).show();
+                rotateLoading.stop();
+                finish();
+            }
+
+            @Override
+            public void onFailure(Call call, Throwable t) {
+                Log.w("Register fail::",t.getMessage());
+                rotateLoading.stop();
+                backgroundLoading.setVisibility(View.GONE);
+            }
+        });
+    }
+
+    //TODO:Popup show to chose select image from gallery or take photo by camera
     public void showPopup(View v){
         dialog.setContentView(R.layout.uplaod_image_popup);
         LinearLayout btnTakePhot = dialog.findViewById(R.id.btn_take_photo);
@@ -137,7 +172,7 @@ public class AddNewsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent iGallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                if (ContextCompat.checkSelfPermission(AddNewsActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)== PackageManager.PERMISSION_GRANTED){
+                if (ContextCompat.checkSelfPermission(CreatePostActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)== PackageManager.PERMISSION_GRANTED){
                     iGallery.setType("image/*");
                     startActivityForResult(iGallery,REQUEST_IMAGE_GALLERY);
                 }else {
@@ -157,6 +192,29 @@ public class AddNewsActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    //TODO:: Request permission to access external storage
+    private void requestPermission(){
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.READ_EXTERNAL_STORAGE)){
+            new AlertDialog.Builder(this)
+                    .setTitle("Permission needed")
+                    .setMessage("We need to access your storage to get required data")
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    }).setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            }).create().show();
+        }else {
+            ActivityCompat.requestPermissions(this,new String[] {Manifest.permission.READ_EXTERNAL_STORAGE},STORAGE_PERMISSION_CODE);
+        }
+    }
+
+    //TODO: After get data from select image or take picture
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -197,43 +255,7 @@ public class AddNewsActivity extends AppCompatActivity {
 
     }
 
-//    Request runtime permission android method
-    private void requestPermission(){
-        if (ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.READ_EXTERNAL_STORAGE)){
-            new AlertDialog.Builder(this)
-                    .setTitle("Permission needed")
-                    .setMessage("We need to access your storage to get required data")
-                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    }).setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            }).create().show();
-        }else {
-            ActivityCompat.requestPermissions(this,new String[] {Manifest.permission.READ_EXTERNAL_STORAGE},STORAGE_PERMISSION_CODE);
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == STORAGE_PERMISSION_CODE){
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                Intent iGallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                iGallery.setType("image/*");
-                startActivityForResult(iGallery,REQUEST_IMAGE_GALLERY);
-            }else {
-                Toast.makeText(this,"Permission DENIED",Toast.LENGTH_LONG).show();
-            }
-        }
-    }
-
-
-//    Convert from bitmap picture
+    //TODO::    Convert from bitmap picture to bite array
     public void convertBitToBite(Bitmap bitmap) throws IOException {
         f = new File(getApplicationContext().getCacheDir(),"imageToUpload");
         f.createNewFile();
@@ -247,5 +269,10 @@ public class AddNewsActivity extends AppCompatActivity {
         fileOutputStream.close();
 
     }
-}
 
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+}

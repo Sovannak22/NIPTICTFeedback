@@ -23,14 +23,14 @@ public class NewsInfoFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_news_info,container,false);
+        View v = inflater.inflate(R.layout.fragment_news,container,false);
         String baseUrl=((MyApplication)getActivity().getApplication()).getBaseUrl();
         String tilte = getArguments().getString("Title");
         String description = getArguments().getString("Description");
         String imageUrl = baseUrl+(getArguments().getString("ImageUrl"));
-        imgNews = v.findViewById(R.id.img_news);
-        tvTitle = v.findViewById(R.id.tv_title);
-        tvDescription = v.findViewById(R.id.tv_description);
+//        imgNews = v.findViewById(R.id.img_news);
+//        tvTitle = v.findViewById(R.id.tv_title);
+//        tvDescription = v.findViewById(R.id.tv_description);
         tvTitle.setText(tilte);
         tvDescription.setText(description);
         Picasso.get().load(imageUrl).into(imgNews);

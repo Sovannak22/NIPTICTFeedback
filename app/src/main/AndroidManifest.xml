@@ -13,13 +13,15 @@
         android:roundIcon="@drawable/ic_feedback"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".NewInfoActivity"></activity>
+        <activity android:name=".CreatePostActivity"></activity>
+        <activity android:name=".NewInfoActivity" />
         <activity android:name=".HomeAdmin" />
         <activity android:name=".AddNewsActivity" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".AppActivity" />
         <activity android:name=".NewsAdminActivity" />
+        <activity android:name=".SelectPrivacyActivity"/>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

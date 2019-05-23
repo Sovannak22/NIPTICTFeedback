@@ -66,6 +66,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.MyViewHo
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
         myViewHolder.tvDescription.setText(comments.get(i).getDescription());
+        myViewHolder.tvUsername.setText(comments.get(i).getUsername());
     }
 
 
@@ -76,10 +77,11 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.MyViewHo
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
-        TextView tvDescription;
+        TextView tvDescription,tvUsername;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             tvDescription = itemView.findViewById(R.id.tv_description_custom_comment);
+            tvUsername = itemView.findViewById(R.id.tv_username_comment);
 
         }
     }

@@ -22,31 +22,10 @@
         <LinearLayout
             android:id="@+id/comment_fragment_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="75dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="60dp"
+            android:layout_marginBottom="80dp"
             android:orientation="vertical">
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rcl_comment"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-            </android.support.v7.widget.RecyclerView>
-        </LinearLayout>
-        <LinearLayout
-        android:id="@+id/no_comment_show"
-        android:layout_marginTop="75dp"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorAccent"
-        android:gravity="center"
-        >
-        <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="@dimen/text_size"
-        android:text="There are no comment for this post"
-        android:textColor="@color/hintColor"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -56,6 +35,7 @@
             android:layout_alignParentBottom="true">
 
             <EditText
+                android:id="@+id/txt_comment"
                 android:layout_width="0dp"
                 android:layout_height="75dp"
                 android:layout_weight="1"
@@ -65,17 +45,11 @@
                 android:textSize="@dimen/text_size" />
 
             <ImageView
+                android:id="@+id/img_btn_submit_comment"
                 android:layout_width="50dp"
                 android:layout_height="match_parent"
                 android:src="@drawable/ic_keyboard_arrow_right_black_24dp" />
         </LinearLayout>
     </RelativeLayout>
-
-    <LinearLayout
-        android:id="@+id/alert_popup_comment"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
-        android:orientation="vertical"></LinearLayout>
 
 </RelativeLayout>

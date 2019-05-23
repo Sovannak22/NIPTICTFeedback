@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 
 import com.example.niptictfeedback.apis.UserApi;
 import com.example.niptictfeedback.models.User;
+import com.victor.loading.rotate.RotateLoading;
 
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
@@ -43,6 +45,10 @@ public class RegisterActivity extends AppCompatActivity {
     private Button btnRegister;
     //Declare for access user api
     private UserApi userApi;
+
+    private RotateLoading rotateLoading;
+    private LinearLayout lodingBackground;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +61,10 @@ public class RegisterActivity extends AppCompatActivity {
         txtPassword = findViewById(R.id.txt_password);
         txtCPassword = findViewById(R.id.txt_c_password);
 
+        rotateLoading = findViewById(R.id.rotate_loading_register);
+        lodingBackground = findViewById(R.id.loding_bg_register);
+        lodingBackground.setVisibility(View.GONE);
+
         btnRegister = findViewById(R.id.btn_register);
 
         tvLogin.setOnClickListener(new View.OnClickListener() {
@@ -66,8 +76,9 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
+        String baseUrl=((MyApplication) getApplicationContext()).getBaseUrl();
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:8000/")
+                .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         userApi = retrofit.create(UserApi.class);
@@ -84,6 +95,8 @@ public class RegisterActivity extends AppCompatActivity {
                 //        Test cPassword and Password
                 if (password.equals(cPassword)){
                     addListenerButton();
+                    lodingBackground.setVisibility(View.VISIBLE);
+                    rotateLoading.start();
                     createPost();
                 }
                 else {
@@ -108,6 +121,8 @@ public class RegisterActivity extends AppCompatActivity {
             public void onResponse(Call<User> call, Response<User> response) {
                 if (!response.isSuccessful()){
                     Log.w("Register:: ",response.code()+""+response.message());
+                    lodingBackground.setVisibility(View.GONE);
+                    rotateLoading.stop();
                     return;
                 }
 
@@ -118,11 +133,19 @@ public class RegisterActivity extends AppCompatActivity {
                 content+="Token: "+userResponce.getToken()+"\n";
 
                 Log.w("Register:: ","Successfully "+content+response);
+
+                String tokenType = "Bearer";
+                String accessToken = userResponce.getToken();
+                ((MyApplication) getApplicationContext()).setAuthorization(tokenType+" "+accessToken);
+                Intent intent = new Intent(RegisterActivity.this,AppActivity.class);
+                startActivity(intent);
             }
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
                 Log.w("Register fail::",t.getMessage());
+                lodingBackground.setVisibility(View.GONE);
+                rotateLoading.stop();
             }
         });
     }

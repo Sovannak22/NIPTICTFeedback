@@ -53,7 +53,7 @@ public class NewsDormFragment extends Fragment {
 
         NewsApi newsApi = retrofit.create(NewsApi.class);
         String auth=((MyApplication)getActivity().getApplication()).getAuthorization();
-        Call<List<News>> call = newsApi.getNewsWithId(auth,1);
+        Call<List<News>> call = newsApi.getNewsWithId(auth,5);
         call.enqueue(new Callback<List<News>>() {
             @Override
             public void onResponse(Call<List<News>> call, Response<List<News>> response) {

@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -31,7 +32,7 @@ public class FeedbackAdapter extends RecyclerView.Adapter<FeedbackAdapter.MyView
     private Context context;
     private RecyclerView recyclerView;
     private String baseUrl;
-    private LinearLayout btnComment;
+
     public FeedbackAdapter(List<FeedBack> feedBacks, Context context,RecyclerView recyclerView) {
         this.feedBacks = feedBacks;
         this.context = context;
@@ -44,7 +45,16 @@ public class FeedbackAdapter extends RecyclerView.Adapter<FeedbackAdapter.MyView
     public FeedbackAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, final int i) {
 
         View myView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.custome_feedback,viewGroup,false);
+        MyViewHolder holder = new MyViewHolder(myView,new MyViewHolder.MyClickListener(){
 
+            @Override
+            public void onComment(int p) {
+                Intent intent = new Intent(context,CommentActivity.class);
+                String id = feedBacks.get(p).getId();
+                intent.putExtra("FeedbackID",id);
+                context.startActivity(intent);
+            }
+        });
         mOnClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,10 +83,8 @@ public class FeedbackAdapter extends RecyclerView.Adapter<FeedbackAdapter.MyView
 //
 //            }
 //        };
-//
-        myView.setOnClickListener(mOnClickListener);
-//        btnComment.setOnClickListener(mOnClickListener);
-        return new MyViewHolder(myView);
+//        myView.setOnClickListener(mOnClickListener);
+        return holder;
 
     }
 
@@ -93,22 +101,35 @@ public class FeedbackAdapter extends RecyclerView.Adapter<FeedbackAdapter.MyView
         return feedBacks.size();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder{
+    public static class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView tvDescription;
         ImageView imageFeedback;
-        public MyViewHolder(@NonNull View itemView) {
+        LinearLayout btnComment;
+        MyClickListener myClickListener;
+        public MyViewHolder(@NonNull View itemView,MyClickListener listener) {
             super(itemView);
             tvDescription = itemView.findViewById(R.id.tv_description_custom_feedback);
             imageFeedback = itemView.findViewById(R.id.img_custom_feedback);
             btnComment = itemView.findViewById(R.id.btn_comment_custom_feedback);
+            this.myClickListener = listener;
+            btnComment.setOnClickListener(this);
 
+        }
+
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()){
+                case R.id.btn_comment_custom_feedback:
+                    myClickListener.onComment(this.getLayoutPosition());
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        public interface MyClickListener {
+            void onComment(int p);
         }
     }
 
-    private Uri getImageUri(Context context, Bitmap inImage) {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-        String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), inImage, "Title", null);
-        return Uri.parse(path);
-    }
 }

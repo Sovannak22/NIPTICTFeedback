@@ -72,10 +72,8 @@ public class FragmentFeedbackDorm extends Fragment {
                             .setWarningInset(0,0,0,0)
                             .setWarningBoxRadius(0,0,0,0)
                             .show();
-                    Log.e("Getnews::","!success");
                 }
                 feedBacks= response.body();
-                Log.w("feedback::",feedBacks.get(0).getDescription());
                 feedbackAdapter = new FeedbackAdapter(feedBacks,getContext(),recyclerView);
                 recyclerView.setAdapter(feedbackAdapter);
             }

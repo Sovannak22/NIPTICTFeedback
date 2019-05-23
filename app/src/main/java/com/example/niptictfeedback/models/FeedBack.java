@@ -2,8 +2,13 @@ package com.example.niptictfeedback.models;
 
 public class FeedBack {
     private int user_id,place_id,feedback_type_id;
-    private String title,description;
+    private String title,description,id;
     private String img;
+
+    public String getId() {
+        return id;
+    }
+
     private String created_at;
 
     public FeedBack(int place_id, int feedback_type_id, String title, String description, String img) {

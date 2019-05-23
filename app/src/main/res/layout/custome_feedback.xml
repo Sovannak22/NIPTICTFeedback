@@ -102,6 +102,7 @@
                 android:text="Like"/>
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/btn_comment_custom_feedback"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"

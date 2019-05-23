@@ -12,28 +12,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.niptictfeedback.CommentActivity;
 import com.example.niptictfeedback.MyApplication;
 import com.example.niptictfeedback.R;
-import com.example.niptictfeedback.models.FeedBack;
+import com.example.niptictfeedback.models.Comment;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.util.List;
 
-public class FeedbackAdapter extends RecyclerView.Adapter<FeedbackAdapter.MyViewHolder>  {
+public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.MyViewHolder>{
 
-    private List<FeedBack> feedBacks;
+    private List<Comment> comments;
     private View.OnClickListener mOnClickListener;
     private Context context;
     private RecyclerView recyclerView;
     private String baseUrl;
-    private LinearLayout btnComment;
-    public FeedbackAdapter(List<FeedBack> feedBacks, Context context,RecyclerView recyclerView) {
-        this.feedBacks = feedBacks;
+    public CommentAdapter(List<Comment> comments, Context context,RecyclerView recyclerView) {
+        this.comments = comments;
         this.context = context;
         this.recyclerView = recyclerView;
         this.baseUrl = ((MyApplication) context.getApplicationContext()).getBaseUrl();
@@ -41,28 +38,15 @@ public class FeedbackAdapter extends RecyclerView.Adapter<FeedbackAdapter.MyView
 
     @NonNull
     @Override
-    public FeedbackAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, final int i) {
+    public CommentAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, final int i) {
 
-        View myView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.custome_feedback,viewGroup,false);
-
-        mOnClickListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int itemPos = recyclerView.getChildLayoutPosition(v);
-                FeedBack feedBack = feedBacks.get(itemPos);
-                Intent intent = new Intent(context, CommentActivity.class);
-
-                intent.putExtra("FeedbackID",feedBack.getId());
-                context.startActivity(intent);
-
-            }
-        };
+        View myView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.custome_comment_recycler_view,viewGroup,false);
 //        mOnClickListener = new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
 //                AppCompatActivity appCompatActivity  = (AppCompatActivity)v.getContext();
 //                int itemPos = recyclerView.getChildLayoutPosition(v);
-//                News news = newsList.get(itemPos);
+//                Comment news = newsList.get(itemPos);
 //
 //                Intent intent = new Intent(context, NewInfoActivity.class);
 //                intent.putExtra("ImageUrl",news.getImage_url());
@@ -74,33 +58,28 @@ public class FeedbackAdapter extends RecyclerView.Adapter<FeedbackAdapter.MyView
 //            }
 //        };
 //
-        myView.setOnClickListener(mOnClickListener);
-//        btnComment.setOnClickListener(mOnClickListener);
+//        myView.setOnClickListener(mOnClickListener);
         return new MyViewHolder(myView);
 
     }
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
-        myViewHolder.tvDescription.setText(feedBacks.get(i).getDescription());
-        Picasso.get().load(baseUrl+(feedBacks.get(i).getImg())).into(myViewHolder.imageFeedback);
+        myViewHolder.tvDescription.setText(comments.get(i).getDescription());
     }
 
 
 
     @Override
     public int getItemCount() {
-        return feedBacks.size();
+        return comments.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
         TextView tvDescription;
-        ImageView imageFeedback;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvDescription = itemView.findViewById(R.id.tv_description_custom_feedback);
-            imageFeedback = itemView.findViewById(R.id.img_custom_feedback);
-            btnComment = itemView.findViewById(R.id.btn_comment_custom_feedback);
+            tvDescription = itemView.findViewById(R.id.tv_description_custom_comment);
 
         }
     }

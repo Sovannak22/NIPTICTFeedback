@@ -14,4 +14,16 @@
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:orientation="vertical"></LinearLayout>
+    <LinearLayout
+        android:id="@+id/no_new_found"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorAccent"
+        android:gravity="center">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_size"
+            android:text="No news found"/>
+    </LinearLayout>
 </RelativeLayout>

@@ -1,118 +1,152 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <LinearLayout
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/tool_bar_privacy"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView
-            android:textStyle="bold"
-            android:textSize="30sp"
-            android:text="Who can see your feedback?"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <TextView
-            android:layout_gravity="center"
-            android:layout_marginTop="@dimen/text_size"
-            android:textSize="20sp"
-            android:text="To set privacy of your feedback to every member
-or only admin to see it.
-"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimaryDark"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"></android.support.v7.widget.Toolbar>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical"
         android:layout_marginVertical="@dimen/paddingSize">
 
-        <!--Gender Radio box ###################################################################-->
-        <RadioGroup
-            android:id="@+id/radio_group_privacy"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Who can see your feedback?"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_margin="@dimen/paddingSize"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/text_size"
+            android:text="To set privacy of your feedback to every member or only admin to see it."
+            android:textSize="20sp" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_margin="@dimen/paddingSize"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginVertical="@dimen/paddingSize">
+            <RadioGroup
+                android:id="@+id/radio_group_privacy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginVertical="@dimen/paddingSize">
                 <RadioButton
                     android:id="@+id/public_privacy_post"
-                    android:checked="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/paddingSize"
-
                     android:buttonTint="@color/colorPrimary"
-                    />
-                <ImageView
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_worldwide"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <LinearLayout
-                    android:layout_marginLeft="10dp"
-                    android:orientation="vertical"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-                    <TextView
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:text="Pubic"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                    <TextView
-                        android:textSize="14sp"
-                        android:text="Every member can see it"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-
-            </LinearLayout>
-
+                    android:checked="true"
+                    android:layout_marginVertical="@dimen/paddingSize"/>
                 <RadioButton
+                    android:layout_marginVertical="@dimen/paddingSize"
                     android:id="@+id/private_privacy_post"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/paddingSize"
-                    android:buttonTint="@color/colorPrimary"></RadioButton>
-                <ImageView
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_address"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:buttonTint="@color/colorPrimary"
+                    ></RadioButton>
+            </RadioGroup>
+            <LinearLayout
+                android:layout_marginHorizontal="@dimen/paddingSize"
+                android:paddingTop="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
                 <LinearLayout
-                    android:layout_marginLeft="10dp"
-                    android:orientation="vertical"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
-                    <TextView
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:text="Private"
+                    <ImageView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:src="@drawable/ic_worldwide"
+                        android:layout_gravity="center"/>
+
+                    <LinearLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                    <TextView
-                        android:textSize="14sp"
-                        android:text="Only admin can see your post"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Pubic"
+                            android:textSize="@dimen/text_size"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Every member can see it"
+                            android:textSize="@dimen/textSizeSmall" />
+
+                    </LinearLayout>
                 </LinearLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_address" />
 
-        </RadioGroup>
+                    <LinearLayout
+                        android:layout_marginVertical="@dimen/paddingSize"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:orientation="vertical">
 
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Private"
+                            android:textSize="@dimen/text_size"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Only admin can see your post"
+                            android:textSize="@dimen/textSizeSmall"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
 
     <Button
-
+        android:id="@+id/btn_done_privacy"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
         android:layout_marginTop="@dimen/text_size"
         android:background="@drawable/blue_white_background"
-        android:layout_gravity="center"
         android:text="Done"
-        android:textSize="30sp"
         android:textColor="#fff"
-        android:layout_width="250dp"
-        android:layout_height="80dp" />
-
+        android:textSize="30sp" />
 
 
 </LinearLayout>

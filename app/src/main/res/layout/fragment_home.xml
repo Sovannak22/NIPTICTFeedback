@@ -28,7 +28,7 @@
             android:layout_marginRight="@dimen/paddingSize"/>
     </LinearLayout>
     <LinearLayout
-        android:background="@color/hintColor"
+        android:background="@color/colorAccent"
         android:id="@+id/feedbacks_user_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"

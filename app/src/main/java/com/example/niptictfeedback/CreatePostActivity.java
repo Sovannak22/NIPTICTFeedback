@@ -1,12 +1,15 @@
 package com.example.niptictfeedback;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.Dialog;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -45,16 +48,22 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class CreatePostActivity extends AppCompatActivity {
 
     private Intent intent;
-    private TextView tvPlace;
+    private TextView tvPlace,tvPrivacy;
     private Toolbar toolbar;
     private LinearLayout btnPrivacy,btnUploadPic,backgroundLoading;
     private FeedbackApi feedbackApi;
     private EditText txtTitle,txtDescription;
     private ImageView imageUploaded;
     private Dialog dialog;
+    private String privacy="1",privacyString="public";
+    private final int REQUEST_PRIVACY_CODE=4;
     //Request code for select image or open camera dialog
     private final int REQUEST_IMAGE_GALLERY = 2,REQUEST_IMAGE_CAPTURE=1;
     private final int STORAGE_PERMISSION_CODE=3;
+
+    ContentValues values;
+    Uri imageUri;
+    Bitmap thumbnail;
 
     private File f;
 
@@ -75,6 +84,8 @@ public class CreatePostActivity extends AppCompatActivity {
         backgroundLoading = findViewById(R.id.loading_background_add_feedback);
         backgroundLoading.setVisibility(View.GONE);
         rotateLoading = findViewById(R.id.rotate_loading_add_feedback);
+        tvPrivacy = findViewById(R.id.privacy_text_post);
+
 
         dialog = new Dialog(this);
 
@@ -87,7 +98,7 @@ public class CreatePostActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(CreatePostActivity.this,SelectPrivacyActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent,REQUEST_PRIVACY_CODE);
             }
         });
 
@@ -128,7 +139,7 @@ public class CreatePostActivity extends AppCompatActivity {
         RequestBody titlePart = RequestBody.create(MultipartBody.FORM,title);
         RequestBody descriptionPart = RequestBody.create(MultipartBody.FORM,description);
         RequestBody placeIdPart = RequestBody.create(MultipartBody.FORM,intent.getStringExtra("PlaceId"));
-        RequestBody feedbackTypeIdPart = RequestBody.create(MultipartBody.FORM,"1");
+        RequestBody feedbackTypeIdPart = RequestBody.create(MultipartBody.FORM,privacy);
         MultipartBody.Part body=null;
         if (f != null){
             RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), f);
@@ -185,7 +196,15 @@ public class CreatePostActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent iCamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 if (iCamera.resolveActivity(getPackageManager()) != null){
-                    startActivityForResult(iCamera,REQUEST_IMAGE_CAPTURE);
+                    values = new ContentValues();
+                    values.put(MediaStore.Images.Media.TITLE, "New Picture");
+                    values.put(MediaStore.Images.Media.DESCRIPTION, "From your Camera");
+                    imageUri = getContentResolver().insert(
+                            MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                    startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
+//                    startActivityForResult(iCamera,REQUEST_IMAGE_CAPTURE);
                 }
             }
         });
@@ -214,23 +233,28 @@ public class CreatePostActivity extends AppCompatActivity {
         }
     }
 
-    //TODO: After get data from select image or take picture
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK){
+            //TODO: After get data from select image or take picture
             if (requestCode == REQUEST_IMAGE_CAPTURE){
-                Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-                imageUploaded.setImageBitmap(bitmap);
                 Log.e("Upload image:: ","Camera");
-                try {
-                    convertBitToBite(bitmap);
-                    dialog.dismiss();
-                } catch (IOException e) {
-                    e.printStackTrace();
+
+                if (resultCode == Activity.RESULT_OK) {
+                    try {
+                        thumbnail = MediaStore.Images.Media.getBitmap(
+                                getContentResolver(), imageUri);
+                        Bitmap bitmapResize = Bitmap.createScaledBitmap(thumbnail,1000,750,true);
+                        imageUploaded.setImageBitmap(thumbnail);
+                        convertBitToBite(bitmapResize);
+                        dialog.dismiss();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
                 }
-//                imageUploaded.setImageBitmap(bitmap);
             }
             else if (requestCode == REQUEST_IMAGE_GALLERY){
                 Uri uri = data.getData();
@@ -248,6 +272,12 @@ public class CreatePostActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
+        }
+        //TODO: Wait result from acitivity select privacy
+        else if (requestCode==REQUEST_PRIVACY_CODE){
+            privacy = data.getStringExtra("Privacy");
+            privacyString = data.getStringExtra("PrivacyString");
+            tvPrivacy.setText(privacyString);
         }
         else {
             Log.e("Upload image:: ",resultCode+"");

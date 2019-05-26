@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".RegisterActivity"
     android:orientation="vertical">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -56,8 +57,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:layout_marginVertical="@dimen/paddingSize">
+                    android:layout_weight="1">
                     <EditText
                         android:padding="@dimen/paddingSize"
                         android:id="@+id/txt_fullname"
@@ -78,7 +78,7 @@
                     <EditText
                         android:padding="@dimen/paddingSize"
                         android:id="@+id/txt_student_id"
-                        android:hint="Student ID"
+                        android:hint="Your ID"
                         android:textColor="@color/colorPrimary"
                         android:textSize="@dimen/text_size"
                         android:layout_width="match_parent"
@@ -223,7 +223,6 @@
         android:id="@+id/loding_bg_register"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
         android:background="#aaffffff">
         <com.victor.loading.rotate.RotateLoading
             android:id="@+id/rotate_loading_register"

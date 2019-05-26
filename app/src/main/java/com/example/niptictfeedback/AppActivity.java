@@ -26,8 +26,7 @@ public class AppActivity extends AppCompatActivity {
         setContentView(R.layout.activity_app);
         Log.e("Token",""+((MyApplication)this.getApplication()).getAuthorization());
         tabLayout = findViewById(R.id.app_tab_layout);
-
-        toolbar = findViewById(R.id.tool_bar_user);
+        toolbar = findViewById(R.id.toolbar_user);
         setSupportActionBar(toolbar);
 
         homeTabItem = findViewById(R.id.tab_home);

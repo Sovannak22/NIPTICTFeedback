@@ -38,7 +38,7 @@ public class NewsFragment extends Fragment {
                 btnDorm.setTextColor(getResources().getColor(R.color.colorAccent));
                 btnCanteen.setTextColor(getResources().getColor(R.color.colorPrimary));
                 FragmentNewsDorm fragmentNewsDorm = new FragmentNewsDorm();
-                getChildFragmentManager().beginTransaction().add(R.id.news_user_container, fragmentNewsDorm).commit();
+                getChildFragmentManager().beginTransaction().replace(R.id.news_user_container, fragmentNewsDorm).commit();
 
             }
         });
@@ -50,7 +50,7 @@ public class NewsFragment extends Fragment {
                 btnDorm.setTextColor(getResources().getColor(R.color.colorPrimary));
                 btnCanteen.setTextColor(getResources().getColor(R.color.colorAccent));
                 FragmentNewsCanteen fragmentNewsCanteen = new FragmentNewsCanteen();
-                getChildFragmentManager().beginTransaction().add(R.id.news_user_container, fragmentNewsCanteen).commit();
+                getChildFragmentManager().beginTransaction().replace(R.id.news_user_container, fragmentNewsCanteen).commit();
             }
         });
         return v;

@@ -31,7 +31,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class FragmentNewsDorm extends Fragment {
 
     private NewsApi newsApi;
-    private LinearLayout alertPopUp;
+    private LinearLayout alertPopUp,noNewFound;
     private RecyclerView recyclerView;
     private NewsAdapter newsAdapter;
     private List<News> news;
@@ -40,6 +40,9 @@ public class FragmentNewsDorm extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_news,container,false);
+
+        noNewFound = v.findViewById(R.id.no_new_found);
+        noNewFound.setVisibility(View.GONE);
 
         alertPopUp = v.findViewById(R.id.alert_popup_user_news);
         news = new ArrayList<>();
@@ -61,7 +64,7 @@ public class FragmentNewsDorm extends Fragment {
 
     public void getNews(){
         String auth=((MyApplication) getActivity().getApplication()).getAuthorization();
-        Call<List<News>> call = newsApi.getNews(auth);
+        Call<List<News>> call = newsApi.getNewsWithId(auth,1);
         call.enqueue(new Callback<List<News>>() {
             @Override
             public void onResponse(Call<List<News>> call, Response<List<News>> response) {
@@ -72,11 +75,16 @@ public class FragmentNewsDorm extends Fragment {
                             .setWarningInset(0,0,0,0)
                             .setWarningBoxRadius(0,0,0,0)
                             .show();
-                    Log.e("Getnews::","!success");
+                    Log.e("Getnews::","!success"+response.code());
+                    return;
                 }
                 news= response.body();
-                newsAdapter = new NewsAdapter(news,getContext(),recyclerView);
-                recyclerView.setAdapter(newsAdapter);
+                if (news.size()>0){
+                    newsAdapter = new NewsAdapter(news,getContext(),recyclerView);
+                    recyclerView.setAdapter(newsAdapter);
+                    return;
+                }
+                noNewFound.setVisibility(View.VISIBLE);
             }
 
             @Override

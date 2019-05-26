@@ -35,6 +35,7 @@ public class FragmentFeedbackDorm extends Fragment {
     private RecyclerView recyclerView;
     private FeedbackAdapter feedbackAdapter;
     private List<FeedBack> feedBacks;
+    private LinearLayout noPostFound;
 
     @Nullable
     @Override
@@ -46,7 +47,8 @@ public class FragmentFeedbackDorm extends Fragment {
         recyclerView = v.findViewById(R.id.rcl_news_user);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
+        noPostFound = v.findViewById(R.id.no_new_found);
+        noPostFound.setVisibility(View.GONE);
         String baseUrl=((MyApplication)getActivity().getApplication()).getBaseUrl();
         Retrofit retrofit =new Retrofit.Builder()
                 .baseUrl(baseUrl)
@@ -61,7 +63,7 @@ public class FragmentFeedbackDorm extends Fragment {
 
     public void getFeedbacks(){
         String auth=((MyApplication) getActivity().getApplication()).getAuthorization();
-        Call<List<FeedBack>> call = feedbackApi.getFeedback(auth);
+        Call<List<FeedBack>> call = feedbackApi.getFeedbackWithId(auth,1);
         call.enqueue(new Callback<List<FeedBack>>() {
             @Override
             public void onResponse(Call<List<FeedBack>> call, Response<List<FeedBack>> response) {
@@ -72,10 +74,15 @@ public class FragmentFeedbackDorm extends Fragment {
                             .setWarningInset(0,0,0,0)
                             .setWarningBoxRadius(0,0,0,0)
                             .show();
+                    return;
                 }
                 feedBacks= response.body();
-                feedbackAdapter = new FeedbackAdapter(feedBacks,getContext(),recyclerView);
-                recyclerView.setAdapter(feedbackAdapter);
+                if (feedBacks.size()>0){
+                    feedbackAdapter = new FeedbackAdapter(feedBacks,getContext(),recyclerView,"AppActivity");
+                    recyclerView.setAdapter(feedbackAdapter);
+                    return;
+                }
+                noPostFound.setVisibility(View.VISIBLE);
             }
 
             @Override

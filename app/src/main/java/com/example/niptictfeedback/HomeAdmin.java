@@ -27,5 +27,12 @@ public class HomeAdmin extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        linearLayoutPrivate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                intent = new Intent(HomeAdmin.this,PrivateFeedbackAdminActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 }

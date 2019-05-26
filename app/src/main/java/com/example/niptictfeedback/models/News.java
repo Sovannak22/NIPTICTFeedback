@@ -2,7 +2,11 @@ package com.example.niptictfeedback.models;
 
 public class News {
 
-    private String title,description,image_url;
+    private String title,description,image_url,username;
+
+    public String getUsername() {
+        return username;
+    }
 
     private int place_id;
 

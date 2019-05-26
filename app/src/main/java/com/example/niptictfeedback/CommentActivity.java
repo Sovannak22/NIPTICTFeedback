@@ -1,6 +1,8 @@
 package com.example.niptictfeedback;
 
+import android.content.Intent;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -36,12 +38,15 @@ public class CommentActivity extends AppCompatActivity {
     private ImageView btnSubmit;
     private EditText txtComment;
     private CommentApi commentApi;
+    private String previousActivtiy;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comment);
+
+        previousActivtiy = getIntent().getStringExtra("PreviousActivity");
 
         btnSubmit = findViewById(R.id.img_btn_submit_comment);
         txtComment = findViewById(R.id.txt_comment);
@@ -110,5 +115,24 @@ public class CommentActivity extends AppCompatActivity {
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        if (previousActivtiy=="AppActivity"){
+            int fragmentSize = getSupportFragmentManager().getFragments().size();
+            Fragment fragment =getSupportFragmentManager().getFragments().get(fragmentSize-1);
+            final FragmentTransaction ft= getSupportFragmentManager().beginTransaction();
+            ft.detach(fragment);
+            ft.attach(fragment);
+            ft.commit();
+        }
+        else {
+            Intent intent = new Intent(CommentActivity.this,PrivateFeedbackAdminActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 }

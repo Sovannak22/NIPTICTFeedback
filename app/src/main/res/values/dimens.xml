@@ -4,4 +4,6 @@
     <dimen name="textSizeSmall">15sp</dimen>
     <dimen name="textTitle">30sp</dimen>
     <dimen name="paddingSize">10dp</dimen>
+    <dimen name="width">370dp</dimen>
+    <dimen name="height">70dp</dimen>
 </resources>

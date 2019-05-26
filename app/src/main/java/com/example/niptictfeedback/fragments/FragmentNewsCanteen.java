@@ -30,7 +30,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class FragmentNewsCanteen extends Fragment {
     private NewsApi newsApi;
-    private LinearLayout alertPopUp;
+    private LinearLayout alertPopUp,noNewFound;
     private RecyclerView recyclerView;
     private NewsAdapter newsAdapter;
     private List<News> news;
@@ -40,11 +40,15 @@ public class FragmentNewsCanteen extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_news,container,false);
 
+        noNewFound = v.findViewById(R.id.no_new_found);
+        noNewFound.setVisibility(View.GONE);
+
         alertPopUp = v.findViewById(R.id.alert_popup_user_news);
         news = new ArrayList<>();
         recyclerView = v.findViewById(R.id.rcl_news_user);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
 
         String baseUrl=((MyApplication)getActivity().getApplication()).getBaseUrl();
         Retrofit retrofit =new Retrofit.Builder()
@@ -60,7 +64,7 @@ public class FragmentNewsCanteen extends Fragment {
 
     public void getNews(){
         String auth=((MyApplication) getActivity().getApplication()).getAuthorization();
-        Call<List<News>> call = newsApi.getNews(auth);
+        Call<List<News>> call = newsApi.getNewsWithId(auth,2);
         call.enqueue(new Callback<List<News>>() {
             @Override
             public void onResponse(Call<List<News>> call, Response<List<News>> response) {
@@ -74,8 +78,12 @@ public class FragmentNewsCanteen extends Fragment {
                     Log.e("Getnews::","!success");
                 }
                 news= response.body();
-                newsAdapter = new NewsAdapter(news,getContext(),recyclerView);
-                recyclerView.setAdapter(newsAdapter);
+                if (news.size()>0){
+                    newsAdapter = new NewsAdapter(news,getContext(),recyclerView);
+                    recyclerView.setAdapter(newsAdapter);
+                    return;
+                }
+                noNewFound.setVisibility(View.VISIBLE);
             }
 
             @Override

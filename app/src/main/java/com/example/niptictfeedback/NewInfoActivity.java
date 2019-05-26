@@ -34,7 +34,7 @@ public class NewInfoActivity extends AppCompatActivity {
         imageNews = findViewById(R.id.img_news_news_info);
         String baseUrl=((MyApplication) getApplicationContext()).getBaseUrl();
         String imageUrl = baseUrl+(intent.getStringExtra("ImageUrl"));
-        tvAdminName.setText("Admin name");
+        tvAdminName.setText(intent.getStringExtra("Username"));
         tvTitle.setText(intent.getStringExtra("Title"));
         tvDescription.setText(intent.getStringExtra("Description"));
         Picasso.get().load(imageUrl).into(imageNews);

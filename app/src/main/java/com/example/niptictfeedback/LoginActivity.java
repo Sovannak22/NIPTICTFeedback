@@ -86,23 +86,13 @@ public class LoginActivity extends AppCompatActivity {
                 .build();
         userApi = retrofit.create(UserApi.class);
 
-//        Go to admin page test
-        txtAdmin = findViewById(R.id.tv_to_admin);
-        txtAdmin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                intent = new Intent(LoginActivity.this,NewsAdminActivity.class);
-                login();
-                finish();
-            }
-        });
     }
 
     //Login method
     public void login(){
         String stuId = txtStuId.getText()+"";
         String password = txtPassword.getText()+"";
-        Call<User> call = userApi.loginUser(stuId,password,"2","l6P1n39KciDaL45ihBbFX2YsdHzqUxQPtzpx70CE","password");
+        Call<User> call = userApi.loginUser(stuId,password,"2","oo3qQ0Bfh1mtcFEPZwUozf1uWGG0dtxYOkAhxom6","password");
 
         call.enqueue(new Callback<User>() {
             @Override

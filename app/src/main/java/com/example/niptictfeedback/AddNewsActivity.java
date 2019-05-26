@@ -2,6 +2,7 @@ package com.example.niptictfeedback;
 
 import android.Manifest;
 import android.app.Dialog;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -51,14 +52,21 @@ public class AddNewsActivity extends AppCompatActivity {
     EditText txtTitle,txtDescription;
     NewsApi newsApi;
     private final int STORAGE_PERMISSION_CODE=3;
+
+    ContentValues values;
+    Uri imageUri;
+    Bitmap thumbnail;
+
     File f;
     RotateLoading rotateLoading;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_news);
+
         toolbar = findViewById(R.id.toolbar_admin_news);
         setSupportActionBar(toolbar);
+
         dialog = new Dialog(this);
         imageUploaded = findViewById(R.id.image_upload);
         txtTitle = findViewById(R.id.txt_title);
@@ -150,7 +158,14 @@ public class AddNewsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent iCamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 if (iCamera.resolveActivity(getPackageManager()) != null){
-                    startActivityForResult(iCamera,REQUEST_IMAGE_CAPTURE);
+                    values = new ContentValues();
+                    values.put(MediaStore.Images.Media.TITLE, "New Picture");
+                    values.put(MediaStore.Images.Media.DESCRIPTION, "From your Camera");
+                    imageUri = getContentResolver().insert(
+                            MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                    startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
                 }
             }
         });
@@ -163,11 +178,13 @@ public class AddNewsActivity extends AppCompatActivity {
 
         if (resultCode == RESULT_OK){
             if (requestCode == REQUEST_IMAGE_CAPTURE){
-                Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-                imageUploaded.setImageBitmap(bitmap);
                 Log.e("Upload image:: ","Camera");
                 try {
-                    convertBitToBite(bitmap);
+                    thumbnail = MediaStore.Images.Media.getBitmap(
+                            getContentResolver(), imageUri);
+                    Bitmap bitmapResize = Bitmap.createScaledBitmap(thumbnail,1000,750,true);
+                    imageUploaded.setImageBitmap(thumbnail);
+                    convertBitToBite(bitmapResize);
                     dialog.dismiss();
                 } catch (IOException e) {
                     e.printStackTrace();

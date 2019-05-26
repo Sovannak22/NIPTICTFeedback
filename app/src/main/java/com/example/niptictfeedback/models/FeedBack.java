@@ -3,7 +3,15 @@ package com.example.niptictfeedback.models;
 public class FeedBack {
     private int user_id,place_id,feedback_type_id;
     private String title,description,id;
-    private String img;
+    private String img,comments_count,username;
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getComments_count() {
+        return comments_count;
+    }
 
     public String getId() {
         return id;

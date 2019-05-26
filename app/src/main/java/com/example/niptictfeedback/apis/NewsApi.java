@@ -18,8 +18,8 @@ import retrofit2.http.Path;
 public interface NewsApi {
 
     @Headers({"Accept: application/json"})
-    @GET("api/news/admin/{id}")
-    Call<List<News>> getNewsWithId(@Header("Authorization") String header, @Path("id") int newsId);
+    @GET("api/news/place/{id}")
+    Call<List<News>> getNewsWithId(@Header("Authorization") String header, @Path("id") int placeId);
 
     @Headers({"Accept: application/json"})
     @GET("api/news")

@@ -139,6 +139,7 @@ public class RegisterActivity extends AppCompatActivity {
                 ((MyApplication) getApplicationContext()).setAuthorization(tokenType+" "+accessToken);
                 Intent intent = new Intent(RegisterActivity.this,AppActivity.class);
                 startActivity(intent);
+                finish();
             }
 
             @Override

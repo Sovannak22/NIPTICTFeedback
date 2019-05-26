@@ -34,7 +34,7 @@ public class HomeFragment extends Fragment {
                 btnDorm.setTextColor(getResources().getColor(R.color.colorAccent));
                 btnCanteen.setTextColor(getResources().getColor(R.color.colorPrimary));
                 FragmentFeedbackDorm fragmentFeedbackDorm = new FragmentFeedbackDorm();
-                getChildFragmentManager().beginTransaction().add(R.id.feedbacks_user_container, fragmentFeedbackDorm).commit();
+                getChildFragmentManager().beginTransaction().replace(R.id.feedbacks_user_container, fragmentFeedbackDorm).commit();
 
             }
         });
@@ -47,7 +47,7 @@ public class HomeFragment extends Fragment {
                 btnDorm.setTextColor(getResources().getColor(R.color.colorPrimary));
                 btnCanteen.setTextColor(getResources().getColor(R.color.colorAccent));
                 FragmentFeedbackCanteen fragmentFeedbackCanteen = new FragmentFeedbackCanteen();
-                getChildFragmentManager().beginTransaction().add(R.id.feedbacks_user_container, fragmentFeedbackCanteen).commit();
+                getChildFragmentManager().beginTransaction().replace(R.id.feedbacks_user_container, fragmentFeedbackCanteen).commit();
             }
         });
         return v;

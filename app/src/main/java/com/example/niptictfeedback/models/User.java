@@ -1,8 +1,8 @@
 package com.example.niptictfeedback.models;
 
 public class User {
-    private int id,stu_id;
-    private String name,email,password,user_role_id,phone_number,gender,dob,profileImg,moreInfo,cPassword,message,token,access_token,token_type;
+    private int id;
+    private String name,email,password,user_role_id,phone_number,gender,dob,profileImg,moreInfo,cPassword,message,token,access_token,token_type,stu_id;
 
     public String getMessage() {
         return message;
@@ -20,7 +20,7 @@ public class User {
         return token;
     }
 
-    public User(int stu_id, String name, String email, String password, String phone_number, String gender, String dob, String profileImg, String moreInfo, String cPassword) {
+    public User(String stu_id, String name, String email, String password, String phone_number, String gender, String dob, String profileImg, String moreInfo, String cPassword) {
         this.stu_id = stu_id;
         this.name = name;
         this.email = email;
@@ -33,12 +33,12 @@ public class User {
         this.cPassword = cPassword;
     }
 
-    public User(int stu_id, String name, String password, String cPassword,String gender) {
+    public User(String stu_id, String name, String password, String user_role_id,String profileImg) {
         this.stu_id = stu_id;
         this.name = name;
         this.password = password;
-        this.cPassword = cPassword;
-        this.gender = gender;
+        this.user_role_id = user_role_id;
+        this.profileImg = profileImg;
     }
 
     public String getcPassword() {
@@ -49,7 +49,7 @@ public class User {
         return id;
     }
 
-    public int getStu_id() {
+    public String getStu_id() {
         return stu_id;
     }
 

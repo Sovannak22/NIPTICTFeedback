@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -28,7 +29,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class FragmentFeedbackDorm extends Fragment {
+public class FragmentFeedbackDorm extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
 
     private FeedbackApi feedbackApi;
     private LinearLayout alertPopUp;
@@ -36,11 +37,16 @@ public class FragmentFeedbackDorm extends Fragment {
     private FeedbackAdapter feedbackAdapter;
     private List<FeedBack> feedBacks;
     private LinearLayout noPostFound;
+    SwipeRefreshLayout swipeRefreshLayout;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_news,container,false);
+
+        swipeRefreshLayout = v.findViewById(R.id.swipe_refresh_news);
+        swipeRefreshLayout.setOnRefreshListener(this);
+        swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
 
         alertPopUp = v.findViewById(R.id.alert_popup_user_news);
         feedBacks = new ArrayList<>();
@@ -55,13 +61,14 @@ public class FragmentFeedbackDorm extends Fragment {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         feedbackApi = retrofit.create(FeedbackApi.class);
-        getFeedbacks();
+        onLoadingRefresh();
         return v;
 
 
     }
 
     public void getFeedbacks(){
+        swipeRefreshLayout.setRefreshing(true);
         String auth=((MyApplication) getActivity().getApplication()).getAuthorization();
         Call<List<FeedBack>> call = feedbackApi.getFeedbackWithId(auth,1);
         call.enqueue(new Callback<List<FeedBack>>() {
@@ -74,14 +81,17 @@ public class FragmentFeedbackDorm extends Fragment {
                             .setWarningInset(0,0,0,0)
                             .setWarningBoxRadius(0,0,0,0)
                             .show();
+                    swipeRefreshLayout.setRefreshing(false);
                     return;
                 }
                 feedBacks= response.body();
                 if (feedBacks.size()>0){
+                    swipeRefreshLayout.setRefreshing(false);
                     feedbackAdapter = new FeedbackAdapter(feedBacks,getContext(),recyclerView,"AppActivity");
                     recyclerView.setAdapter(feedbackAdapter);
                     return;
                 }
+                swipeRefreshLayout.setRefreshing(false);
                 noPostFound.setVisibility(View.VISIBLE);
             }
 
@@ -94,6 +104,21 @@ public class FragmentFeedbackDorm extends Fragment {
                         .setWarningInset(0,0,0,0)
                         .setWarningBoxRadius(0,0,0,0)
                         .show();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+    }
+
+    @Override
+    public void onRefresh() {
+        getFeedbacks();
+    }
+
+    private void onLoadingRefresh(){
+        swipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                getFeedbacks();
             }
         });
     }

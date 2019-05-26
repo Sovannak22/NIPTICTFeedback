@@ -1,5 +1,6 @@
 package com.example.niptictfeedback;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabItem;
@@ -9,8 +10,11 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.example.niptictfeedback.adapter.page_adapter.PageAdapter;
+import com.example.niptictfeedback.sqlite.UserDBHelper;
 
 public class AppActivity extends AppCompatActivity {
 
@@ -19,9 +23,12 @@ public class AppActivity extends AppCompatActivity {
     ViewPager viewPager;
     PageAdapter adapter;
     Toolbar toolbar;
+    UserDBHelper userDBHelper;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        userDBHelper = new UserDBHelper(this);
 
         setContentView(R.layout.activity_app);
         Log.e("Token",""+((MyApplication)this.getApplication()).getAuthorization());
@@ -60,5 +67,30 @@ public class AppActivity extends AppCompatActivity {
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.app_activit_action_bar,menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.logout){
+            Intent intent = new Intent(AppActivity.this,LoginActivity.class);
+
+            userDBHelper.dropTable();
+            ((MyApplication) getApplicationContext()).setAuthorization(null);
+
+            startActivity(intent);
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

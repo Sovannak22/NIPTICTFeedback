@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -28,18 +29,23 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class FragmentFeedbackCanteen extends Fragment {
+public class FragmentFeedbackCanteen extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
     private FeedbackApi feedbackApi;
     private LinearLayout alertPopUp;
     private RecyclerView recyclerView;
     private FeedbackAdapter feedbackAdapter;
     private List<FeedBack> feedBacks;
     private LinearLayout noPostFound;
+    SwipeRefreshLayout swipeRefreshLayout;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_news,container,false);
+
+        swipeRefreshLayout = v.findViewById(R.id.swipe_refresh_news);
+        swipeRefreshLayout.setOnRefreshListener(this);
+        swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
 
         alertPopUp = v.findViewById(R.id.alert_popup_user_news);
         feedBacks = new ArrayList<>();
@@ -54,7 +60,8 @@ public class FragmentFeedbackCanteen extends Fragment {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         feedbackApi = retrofit.create(FeedbackApi.class);
-        getFeedbacks();
+//        getFeedbacks();
+        onLoadingRefresh();
         return v;
 
 
@@ -94,6 +101,20 @@ public class FragmentFeedbackCanteen extends Fragment {
                         .setWarningInset(0,0,0,0)
                         .setWarningBoxRadius(0,0,0,0)
                         .show();
+            }
+        });
+    }
+
+    @Override
+    public void onRefresh() {
+        getFeedbacks();
+    }
+
+    private void onLoadingRefresh(){
+        swipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                getFeedbacks();
             }
         });
     }

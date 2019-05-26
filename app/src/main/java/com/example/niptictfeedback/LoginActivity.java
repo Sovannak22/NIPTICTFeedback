@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.example.niptictfeedback.apis.UserApi;
 import com.example.niptictfeedback.models.User;
+import com.example.niptictfeedback.sqlite.UserDBHelper;
 import com.victor.loading.rotate.RotateLoading;
 
 import retrofit2.Call;
@@ -44,6 +45,8 @@ public class LoginActivity extends AppCompatActivity {
     private Dialog dialog;
     private RotateLoading rotateLoading;
     private LinearLayout lodingBackground;
+    private UserDBHelper userDBHelper;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +59,9 @@ public class LoginActivity extends AppCompatActivity {
         rotateLoading = findViewById(R.id.rotate_loading_login);
         lodingBackground = findViewById(R.id.loding_bg_login);
         lodingBackground.setVisibility(View.GONE);
+
+        userDBHelper = new UserDBHelper(this);
+
         tvSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -137,6 +143,12 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 User userResponce = response.body();
                 Log.w("user",""+userResponce.getUser_role_id());
+                String stuId = txtStuId.getText()+"";
+                String password = txtPassword.getText()+"";
+                Log.w("stu_id::",stuId+"");
+                Log.w("password",password+"");
+                userDBHelper.insertUser(userResponce.getName(),password,stuId,userResponce.getUser_role_id(),userResponce.getProfileImg());
+
                 loginDirect(userResponce);
                 rotateLoading.stop();
                 startActivity(intent);

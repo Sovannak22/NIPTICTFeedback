@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -29,7 +30,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class FragmentComment extends Fragment {
+public class FragmentComment extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
 
     private LinearLayout alertPopUp;
     private RecyclerView recyclerView;
@@ -37,14 +38,19 @@ public class FragmentComment extends Fragment {
     private CommentApi commentApi;
     private CommentAdapter commentAdapter;
     private LinearLayout noComment;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
-    public FragmentComment() {
+    public FragmentComment(){
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.comments_fragment,container,false);
+
+        swipeRefreshLayout = v.findViewById(R.id.swipe_refresh_comment);
+        swipeRefreshLayout.setOnRefreshListener(this);
+        swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
 
         noComment = v.findViewById(R.id.no_comment_found);
         noComment.setVisibility(View.GONE);
@@ -61,11 +67,13 @@ public class FragmentComment extends Fragment {
                 .build();
         commentApi = retrofit.create(CommentApi.class);
         Log.w("feedbackId::", getArguments().getString("FeedbackId")+"");
+        onLoadingRefresh();
         getComment(Integer.parseInt(getArguments().getString("FeedbackId")));
         return v;
     }
 
     public void getComment(int id){
+        swipeRefreshLayout.setRefreshing(true);
         String auth=((MyApplication)getActivity().getApplication()).getAuthorization();
         Call<List<Comment>> call = commentApi.getCommentById(auth,id);
         call.enqueue(new Callback<List<Comment>>() {
@@ -79,6 +87,7 @@ public class FragmentComment extends Fragment {
                             .setWarningBoxRadius(0,0,0,0)
                             .show();
                     Log.e("Getnews::","!success"+response.message());
+                    swipeRefreshLayout.setRefreshing(false);
                     return;
                 }
                 comments = response.body();
@@ -87,15 +96,17 @@ public class FragmentComment extends Fragment {
                     Log.w("comment size::",""+comments.size());
                     commentAdapter = new CommentAdapter(comments,getContext(),recyclerView);
                     recyclerView.setAdapter(commentAdapter);
+                    swipeRefreshLayout.setRefreshing(false);
                     return;
                 }
-
+                swipeRefreshLayout.setRefreshing(false);
                 noComment.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onFailure(Call<List<Comment>> call, Throwable t) {
                 Log.e("Get news::","Fail");
+                swipeRefreshLayout.setRefreshing(false);
                 Noty.init(getContext(), "No internet connection!", alertPopUp,
                         Noty.WarningStyle.SIMPLE)
                         .setAnimation(Noty.RevealAnim.SLIDE_UP, Noty.DismissAnim.BACK_TO_BOTTOM, 400,400)
@@ -105,4 +116,19 @@ public class FragmentComment extends Fragment {
             }
         });
     }
+
+    @Override
+    public void onRefresh() {
+        getComment(Integer.parseInt(getArguments().getString("FeedbackId")));
+    }
+
+    private void onLoadingRefresh(){
+        swipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                getComment(Integer.parseInt(getArguments().getString("FeedbackId")));
+            }
+        });
+    }
+
 }

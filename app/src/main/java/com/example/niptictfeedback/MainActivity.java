@@ -1,21 +1,14 @@
 package com.example.niptictfeedback;
 
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.ListView;
 
-import com.example.niptictfeedback.adapter.AdapterMember;
 import com.example.niptictfeedback.apis.UserApi;
-import com.example.niptictfeedback.model.Profilemodel;
 import com.example.niptictfeedback.models.User;
 import com.example.niptictfeedback.sqlite.UserDBHelper;
-
-import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -33,8 +26,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         userDBHelper = new UserDBHelper(this);
-//        userDBHelper.dropTable();
         userDBHelper.createNewTable();
         user = userDBHelper.getLoginUser();
 
@@ -44,13 +37,11 @@ public class MainActivity extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         userApi = retrofit.create(UserApi.class);
-
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (user == null){
-                    Log.e("USER:: ","NULL");
-                    toLoginActivity();
+                if (user==null){
+                   toLoginActivity();
                 }
                 else {
                     login();
@@ -68,10 +59,8 @@ public class MainActivity extends AppCompatActivity {
 
     }
     public void login(){
-        String stuId = user.getStu_id();
-        String password= user.getPassword();
-        Log.w("stu_id::",stuId+"");
-        Log.w("password",password+"");
+        String stuId=user.getStu_id();
+        String password=user.getPassword();
         Call<User> call = userApi.loginUser(stuId,password,"2","oo3qQ0Bfh1mtcFEPZwUozf1uWGG0dtxYOkAhxom6","password");
 
         call.enqueue(new Callback<User>() {

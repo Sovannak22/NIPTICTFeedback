@@ -56,13 +56,14 @@ public class AddNewsActivity extends AppCompatActivity {
     ContentValues values;
     Uri imageUri;
     Bitmap thumbnail;
-
     File f;
+
     RotateLoading rotateLoading;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_news);
+
 
         toolbar = findViewById(R.id.toolbar_admin_news);
         setSupportActionBar(toolbar);

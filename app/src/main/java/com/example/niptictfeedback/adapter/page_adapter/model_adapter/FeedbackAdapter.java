@@ -95,6 +95,7 @@ public class FeedbackAdapter extends RecyclerView.Adapter<FeedbackAdapter.MyView
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
         myViewHolder.tvDescription.setText(feedBacks.get(i).getDescription());
         Picasso.get().load(baseUrl+(feedBacks.get(i).getImg())).into(myViewHolder.imageFeedback);
+        Picasso.get().load(baseUrl+(feedBacks.get(i).getProfile_img())).into(myViewHolder.feedProfileImage);
         myViewHolder.tvCommentsCount.setText(feedBacks.get(i).getComments_count());
         myViewHolder.tvUsername.setText(feedBacks.get(i).getUsername());
     }
@@ -108,7 +109,7 @@ public class FeedbackAdapter extends RecyclerView.Adapter<FeedbackAdapter.MyView
 
     public static class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView tvDescription,tvCommentsCount,tvUsername;
-        ImageView imageFeedback;
+        ImageView imageFeedback,feedProfileImage;
         LinearLayout btnComment;
         MyClickListener myClickListener;
         public MyViewHolder(@NonNull View itemView,MyClickListener listener) {
@@ -118,6 +119,7 @@ public class FeedbackAdapter extends RecyclerView.Adapter<FeedbackAdapter.MyView
             btnComment = itemView.findViewById(R.id.btn_comment_custom_feedback);
             tvCommentsCount = itemView.findViewById(R.id.tv_comments_count);
             tvUsername = itemView.findViewById(R.id.tv_username_feedback);
+            feedProfileImage = itemView.findViewById(R.id.feed_profile_image);
             this.myClickListener = listener;
             btnComment.setOnClickListener(this);
 

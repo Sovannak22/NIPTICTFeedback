@@ -5,10 +5,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.example.niptictfeedback.models.User;
 
-import java.util.ArrayList;
 
 public class UserDBHelper extends SQLiteOpenHelper {
 
@@ -27,7 +27,6 @@ public class UserDBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("create table "+TABLE_NAME+"(id integer primary key,name text,student_id text,password text,user_role_id text,profile_img text )");
-        db.close();
     }
 
     public void insertUser(String name,String password,String student_id,String user_role_id,String profile_img){
@@ -42,8 +41,6 @@ public class UserDBHelper extends SQLiteOpenHelper {
         values.put(PROFILE_PICTURE,profile_img);
 
         db.insert(TABLE_NAME,null,values);
-
-        db.close();
 
     }
     @Override
@@ -61,7 +58,6 @@ public class UserDBHelper extends SQLiteOpenHelper {
             cursor.moveToFirst();
             user = new User(cursor.getString(2),cursor.getString(1),cursor.getString(3),cursor.getString(4),cursor.getString(5));
         }
-        db.close();
         return user;
 
     }
@@ -69,11 +65,16 @@ public class UserDBHelper extends SQLiteOpenHelper {
     public void dropTable(){
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL("DROP TABLE IF EXISTS "+TABLE_NAME);
-        db.close();
     }
 
     public void createNewTable(){
         SQLiteDatabase db = getWritableDatabase();
+        if(db.isOpen())
+        {
+            Log.e("TEST","OPEN");
+        }else {
+            Log.e("TEST","CLOSE");
+        }
         if(checkForTableExists(db,TABLE_NAME)){
             return;
         }
@@ -88,6 +89,20 @@ public class UserDBHelper extends SQLiteOpenHelper {
         }
         mCursor.close();
         return false;
+    }
+
+    public void updateProfilePic(String profile_image){
+
+        SQLiteDatabase db = getWritableDatabase();
+
+        ContentValues cv = new ContentValues();
+
+        cv.put("profile_img",profile_image);
+
+        db.update(TABLE_NAME,cv,"id=1",null);
+
+
+
     }
 
 }

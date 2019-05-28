@@ -9,6 +9,7 @@
         android:layout_height="50dp"
         android:orientation="horizontal">
         <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/feed_profile_image"
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_gravity="center"

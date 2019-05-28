@@ -2,7 +2,7 @@ package com.example.niptictfeedback.models;
 
 public class User {
     private int id;
-    private String name,email,password,user_role_id,phone_number,gender,dob,profileImg,moreInfo,cPassword,message,token,access_token,token_type,stu_id;
+    private String name,email,password,user_role_id,phone_number,gender,dob,profile_img,moreInfo,cPassword,message,token,access_token,token_type,stu_id;
 
     public String getMessage() {
         return message;
@@ -19,8 +19,9 @@ public class User {
     public String getToken() {
         return token;
     }
+    public  User(){}
 
-    public User(String stu_id, String name, String email, String password, String phone_number, String gender, String dob, String profileImg, String moreInfo, String cPassword) {
+    public User(String stu_id, String name, String email, String password, String phone_number, String gender, String dob, String profile_img, String moreInfo, String cPassword) {
         this.stu_id = stu_id;
         this.name = name;
         this.email = email;
@@ -28,17 +29,17 @@ public class User {
         this.phone_number = phone_number;
         this.gender = gender;
         this.dob = dob;
-        this.profileImg = profileImg;
+        this.profile_img = profile_img;
         this.moreInfo = moreInfo;
         this.cPassword = cPassword;
     }
 
-    public User(String stu_id, String name, String password, String user_role_id,String profileImg) {
+    public User(String stu_id, String name, String password, String user_role_id,String profile_img) {
         this.stu_id = stu_id;
         this.name = name;
         this.password = password;
         this.user_role_id = user_role_id;
-        this.profileImg = profileImg;
+        this.profile_img = profile_img;
     }
 
     public String getcPassword() {
@@ -82,10 +83,19 @@ public class User {
     }
 
     public String getProfileImg() {
-        return profileImg;
+        return profile_img;
     }
 
     public String getMoreInfo() {
         return moreInfo;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                '}';
     }
 }

@@ -38,6 +38,7 @@ public class NewInfoActivity extends AppCompatActivity {
         tvTitle.setText(intent.getStringExtra("Title"));
         tvDescription.setText(intent.getStringExtra("Description"));
         Picasso.get().load(imageUrl).into(imageNews);
+        tvDate.setText(intent.getStringExtra("TimeAndDate"));
     }
 
     @Override

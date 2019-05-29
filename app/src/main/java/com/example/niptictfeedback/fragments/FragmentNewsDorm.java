@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -28,13 +29,14 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class FragmentNewsDorm extends Fragment {
+public class FragmentNewsDorm extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     private NewsApi newsApi;
     private LinearLayout alertPopUp,noNewFound;
     private RecyclerView recyclerView;
     private NewsAdapter newsAdapter;
     private List<News> news;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Nullable
     @Override
@@ -43,6 +45,10 @@ public class FragmentNewsDorm extends Fragment {
 
         noNewFound = v.findViewById(R.id.no_new_found);
         noNewFound.setVisibility(View.GONE);
+
+        swipeRefreshLayout = v.findViewById(R.id.swipe_refresh_news);
+        swipeRefreshLayout.setOnRefreshListener(this);
+        swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
 
         alertPopUp = v.findViewById(R.id.alert_popup_user_news);
         news = new ArrayList<>();
@@ -56,13 +62,14 @@ public class FragmentNewsDorm extends Fragment {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         newsApi = retrofit.create(NewsApi.class);
-        getNews();
+        onLoadingRefresh();
         return v;
 
 
     }
 
     public void getNews(){
+        swipeRefreshLayout.setRefreshing(true);
         String auth=((MyApplication) getActivity().getApplication()).getAuthorization();
         Call<List<News>> call = newsApi.getNewsWithId(auth,1);
         call.enqueue(new Callback<List<News>>() {
@@ -76,12 +83,14 @@ public class FragmentNewsDorm extends Fragment {
                             .setWarningBoxRadius(0,0,0,0)
                             .show();
                     Log.e("Getnews::","!success"+response.code());
+                    swipeRefreshLayout.setRefreshing(false);
                     return;
                 }
                 news= response.body();
                 if (news.size()>0){
                     newsAdapter = new NewsAdapter(news,getContext(),recyclerView);
                     recyclerView.setAdapter(newsAdapter);
+                    swipeRefreshLayout.setRefreshing(false);
                     return;
                 }
                 noNewFound.setVisibility(View.VISIBLE);
@@ -96,6 +105,21 @@ public class FragmentNewsDorm extends Fragment {
                         .setWarningInset(0,0,0,0)
                         .setWarningBoxRadius(0,0,0,0)
                         .show();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+    }
+
+    @Override
+    public void onRefresh() {
+        getNews();
+    }
+
+    private void onLoadingRefresh(){
+        swipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                getNews();
             }
         });
     }

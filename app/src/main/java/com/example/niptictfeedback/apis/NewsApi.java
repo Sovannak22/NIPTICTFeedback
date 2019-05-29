@@ -7,6 +7,8 @@ import java.util.List;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
@@ -33,5 +35,22 @@ public interface NewsApi {
             @Part MultipartBody.Part image,
             @Part("title") RequestBody title,
             @Part("description") RequestBody description
+    );
+
+    @FormUrlEncoded
+    @Headers({"Accept: application/json"})
+    @POST("api/news/{id}")
+    Call<News> deleteNews(@Header("Authorization") String header, @Path("id") String newsId, @Field("_method") String method);
+
+    @Multipart
+    @Headers({"Accept: application/json"})
+    @POST("api/news/{id}")
+    Call<News> updateNews(
+            @Header("Authorization") String header,
+            @Path("id") String newId,
+            @Part MultipartBody.Part image,
+            @Part("title") RequestBody title,
+            @Part("description") RequestBody description,
+            @Part("_method") RequestBody method
     );
 }

@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
                 String accessToken = userResponce.getAccess_token();
 
                 ((MyApplication) getApplicationContext()).setAuthorization(tokenType+" "+accessToken);
-                intent = new Intent(MainActivity.this,AppActivity.class);
+                loginDirect(user);
                 startActivity(intent);
                 finish();
             }
@@ -88,6 +88,14 @@ public class MainActivity extends AppCompatActivity {
                 toLoginActivity();
             }
         });
+    }
+
+    public void loginDirect(User user){
+        if (Integer.parseInt(user.getUser_role_id())==1){
+            intent = new Intent(MainActivity.this,HomeAdmin.class);
+        }else{
+            intent = new Intent(MainActivity.this,AppActivity.class);
+        }
     }
 
 

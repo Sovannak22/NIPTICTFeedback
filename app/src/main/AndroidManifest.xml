@@ -24,6 +24,7 @@
         <activity android:name=".AppActivity" />
         <activity android:name=".NewsAdminActivity" />
         <activity android:name=".SelectPrivacyActivity" />
+        <activity android:name=".UpdateNewsActivity"/>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

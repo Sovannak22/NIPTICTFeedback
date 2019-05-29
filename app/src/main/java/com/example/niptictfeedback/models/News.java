@@ -2,15 +2,7 @@ package com.example.niptictfeedback.models;
 
 public class News {
 
-    private String title,description,image_url,username,created_at;
-
-    public String getCreated_at() {
-        return created_at;
-    }
-
-    public String getUsername() {
-        return username;
-    }
+    private String title,description,image_url,username,created_at,id;
 
     private int place_id;
 
@@ -28,5 +20,16 @@ public class News {
 
     public int getPlace_id() {
         return place_id;
+    }
+    public String getCreated_at() {
+        return created_at;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getId() {
+        return id;
     }
 }

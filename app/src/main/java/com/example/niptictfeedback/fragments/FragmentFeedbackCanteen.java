@@ -68,6 +68,7 @@ public class FragmentFeedbackCanteen extends Fragment implements SwipeRefreshLay
     }
 
     public void getFeedbacks(){
+        swipeRefreshLayout.setRefreshing(true);
         String auth=((MyApplication) getActivity().getApplication()).getAuthorization();
         Call<List<FeedBack>> call = feedbackApi.getFeedbackWithId(auth,2);
         call.enqueue(new Callback<List<FeedBack>>() {
@@ -81,12 +82,14 @@ public class FragmentFeedbackCanteen extends Fragment implements SwipeRefreshLay
                             .setWarningBoxRadius(0,0,0,0)
                             .show();
                     Log.e("Getnews::","!success");
+                    swipeRefreshLayout.setRefreshing(false);
                     return;
                 }
                 feedBacks= response.body();
                 if (feedBacks.size()>0){
                     feedbackAdapter = new FeedbackAdapter(feedBacks,getContext(),recyclerView,"AppActivity");
                     recyclerView.setAdapter(feedbackAdapter);
+                    swipeRefreshLayout.setRefreshing(false);
                     return;
                 }
                 noPostFound.setVisibility(View.VISIBLE);
@@ -101,6 +104,7 @@ public class FragmentFeedbackCanteen extends Fragment implements SwipeRefreshLay
                         .setWarningInset(0,0,0,0)
                         .setWarningBoxRadius(0,0,0,0)
                         .show();
+                swipeRefreshLayout.setRefreshing(false);
             }
         });
     }

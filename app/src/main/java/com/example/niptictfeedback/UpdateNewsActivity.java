@@ -1,4 +1,4 @@
-package com.example.niptictfeedback.fragments;
+package com.example.niptictfeedback;
 
 import android.Manifest;
 import android.app.Dialog;
@@ -12,36 +12,23 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TabItem;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.niptictfeedback.AddNewsActivity;
-import com.example.niptictfeedback.EditProfileInforActivity;
-import com.example.niptictfeedback.MyApplication;
-import com.example.niptictfeedback.R;
-import com.example.niptictfeedback.adapter.page_adapter.PageAdapter;
-import com.example.niptictfeedback.adapter.page_adapter.ProfilePageAdapter;
-import com.example.niptictfeedback.apis.UserApi;
-import com.example.niptictfeedback.models.User;
-import com.example.niptictfeedback.sqlite.UserDBHelper;
-import com.squareup.picasso.Picasso;
+import com.example.niptictfeedback.apis.NewsApi;
+import com.example.niptictfeedback.models.News;
+import com.victor.loading.rotate.RotateLoading;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -57,142 +44,115 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import static android.app.Activity.RESULT_OK;
+public class UpdateNewsActivity extends AppCompatActivity {
 
-public class ProfileFragment extends Fragment {
-    public ProfileFragment() {
-    }
+    Intent intent;
 
-    MenuItem item;
-    TabLayout tabLayout;
-    TabItem publicTabItem,privateTabItem,responseTabItem;
-    ViewPager viewPager;
-    ProfilePageAdapter adapter;
-    ImageView edit_img,cameraProfile;
-    TextView tvProfileName;
+    Toolbar toolbar;
     Dialog dialog;
-    UserApi userApi;
-    UserDBHelper userDBHelper;
-    private final int STORAGE_PERMISSION_CODE=3;
     private final int REQUEST_IMAGE_GALLERY = 2,REQUEST_IMAGE_CAPTURE=1;
-    User user;
+    ImageView imageUploaded;
+    EditText txtTitle,txtDescription;
+    NewsApi newsApi;
+    private final int STORAGE_PERMISSION_CODE=3;
 
     ContentValues values;
     Uri imageUri;
     Bitmap thumbnail;
     File f;
 
-    @Nullable
+    RotateLoading rotateLoading;
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_profile, container, false);
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-        setHasOptionsMenu(true);
+        intent = getIntent();
 
-        tabLayout = v.findViewById(R.id.tabLayout_id);
-        publicTabItem = v.findViewById(R.id.tab_public);
-        privateTabItem = v.findViewById(R.id.tab_private);
-        responseTabItem = v.findViewById(R.id.tab_response);
-        viewPager = v.findViewById(R.id.viewPager_id);
-        edit_img = v.findViewById(R.id.edit_infor);
-        cameraProfile = v.findViewById(R.id.profile_image);
-        tvProfileName = v.findViewById(R.id.tvProfile_name);
+        setContentView(R.layout.activity_add_news);
 
-        //--Call shoPopup  function
-        cameraProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showPopup(v);
-            }
-        });
+        toolbar = findViewById(R.id.toolbar_admin_news);
+        setSupportActionBar(toolbar);
 
-        dialog = new Dialog(getContext());
+        dialog = new Dialog(this);
+        imageUploaded = findViewById(R.id.image_upload);
 
-        edit_img.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), EditProfileInforActivity.class);
-                startActivity(intent);
-            }
-        });
+        txtTitle = findViewById(R.id.txt_title);
+        txtTitle.setText(intent.getStringExtra("Title"));
 
+        txtDescription = findViewById(R.id.txt_description);
+        txtDescription.setText(intent.getStringExtra("Description"));
 
-        adapter = new ProfilePageAdapter(getActivity(), getChildFragmentManager(), tabLayout.getTabCount());
-        viewPager.setAdapter(adapter);
-
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                viewPager.setCurrentItem(tab.getPosition());
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
-
-        userDBHelper = new UserDBHelper(getContext());
-        userDBHelper.createNewTable();
-        user = userDBHelper.getLoginUser();
-        Log.w("Profile URL::",user.getProfileImg());
-       // Picasso.get().load(baseUrl+(user.getProfileImg())).into(cameraProfile);
-        tvProfileName.setText(user.getName()+"");
-
-        String baseUrl=((MyApplication)getActivity().getApplication()).getBaseUrl();
+        rotateLoading = findViewById(R.id.rotate_loading_addnews);
+        String baseUrl=((MyApplication) getApplicationContext()).getBaseUrl();
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
+        newsApi = retrofit.create(NewsApi.class);
 
-        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        userApi = retrofit.create(UserApi.class);
-        return v;
 
     }
 
-    public void changeProfile(){
-        String auth=((MyApplication)getActivity().getApplication()).getAuthorization();
+    public void updateNews(String id){
+        String title = txtTitle.getText().toString();
+        String description = txtDescription.getText().toString();
+        RequestBody titlePart = RequestBody.create(MultipartBody.FORM,title);
+        RequestBody descriptionPart = RequestBody.create(MultipartBody.FORM,description);
+        RequestBody methodPart = RequestBody.create(MultipartBody.FORM,"PUT");
         MultipartBody.Part body=null;
-
-        RequestBody methodPart = RequestBody.create(MultipartBody.FORM,"PATCH");
-
         if (f != null){
             RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), f);
             body = MultipartBody.Part.createFormData("image","fileAndroid", reqFile);
         }
+        String auth=((MyApplication) getApplicationContext()).getAuthorization();
 
-        Call<User> call = userApi.updateProfilePicture(auth,body,methodPart);
+        Call<News> call = newsApi.updateNews(auth,id,body,titlePart,descriptionPart,methodPart);
 
-        call.enqueue(new Callback<User>() {
+        call.enqueue(new Callback<News>() {
             @Override
-            public void onResponse(Call<User> call, Response<User> response) {
+            public void onResponse(Call<News> call, Response<News> response) {
                 if (!response.isSuccessful()){
-                    Log.w("Upload Profile:: ",response.code()+""+response.message());
+                    Log.w("Register:: ",response.code()+""+response.message());
+                    Toast.makeText(getBaseContext(),"Update news unsuccessfull",Toast.LENGTH_SHORT).show();
                     return;
                 }
-                User userResponce = response.body();
-                userDBHelper.updateProfilePic(userResponce.getProfileImg());
-                Log.w("Upload Profile:: ","Successfully "+response);
-                item.setVisible(false);
-                Toast.makeText(getContext(),"Update Profile successfully",Toast.LENGTH_SHORT).show();
-
-
+                Log.w("Register:: ","Successfully "+response);
+                Intent intent = new Intent(UpdateNewsActivity.this,NewsAdminActivity.class);
+                startActivity(intent);
+                Toast.makeText(getApplicationContext(),"News has Updated",Toast.LENGTH_LONG).show();
+                rotateLoading.stop();
+                finish();
             }
 
             @Override
-            public void onFailure(Call<User> call, Throwable t) {
-                Log.w("Upload Profile fail::","Fail "+t.getMessage());
+            public void onFailure(Call<News> call, Throwable t) {
+                Log.w("Register fail::",t.getMessage());
+                Toast.makeText(getBaseContext(),"Update news unsuccessfull",Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-//    --------Upload Profile picture--------
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.add_news_admin_action_bar,menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.add_news){
+            Toast.makeText(getApplicationContext(),"Add new clicked",Toast.LENGTH_LONG).show();
+            rotateLoading.start();
+            updateNews(intent.getStringExtra("NewsID"));
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 
     public void showPopup(View v){
         dialog.setContentView(R.layout.uplaod_image_popup);
@@ -202,7 +162,7 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent iGallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE)== PackageManager.PERMISSION_GRANTED){
+                if (ContextCompat.checkSelfPermission(UpdateNewsActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)== PackageManager.PERMISSION_GRANTED){
                     iGallery.setType("image/*");
                     startActivityForResult(iGallery,REQUEST_IMAGE_GALLERY);
                 }else {
@@ -214,11 +174,11 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent iCamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                if (iCamera.resolveActivity(getActivity().getPackageManager()) != null){
+                if (iCamera.resolveActivity(getPackageManager()) != null){
                     values = new ContentValues();
                     values.put(MediaStore.Images.Media.TITLE, "New Picture");
                     values.put(MediaStore.Images.Media.DESCRIPTION, "From your Camera");
-                    imageUri = getActivity().getContentResolver().insert(
+                    imageUri = getContentResolver().insert(
                             MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
@@ -230,7 +190,7 @@ public class ProfileFragment extends Fragment {
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK){
@@ -238,9 +198,9 @@ public class ProfileFragment extends Fragment {
                 Log.e("Upload image:: ","Camera");
                 try {
                     thumbnail = MediaStore.Images.Media.getBitmap(
-                            getActivity().getContentResolver(), imageUri);
+                            getContentResolver(), imageUri);
                     Bitmap bitmapResize = Bitmap.createScaledBitmap(thumbnail,1000,750,true);
-                    cameraProfile.setImageBitmap(thumbnail);
+                    imageUploaded.setImageBitmap(thumbnail);
                     convertBitToBite(bitmapResize);
                     dialog.dismiss();
                 } catch (IOException e) {
@@ -253,8 +213,8 @@ public class ProfileFragment extends Fragment {
                 Bitmap bitmap = null;
                 Log.e("Upload image:: ","Gallerry");
                 try {
-                    bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(),uri);
-                    cameraProfile.setImageBitmap(bitmap);
+                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(),uri);
+                    imageUploaded.setImageBitmap(bitmap);
                     Log.e("Upload image:: ","Gallerry");
                     Bitmap bitmapResize = Bitmap.createScaledBitmap(bitmap,1000,750,true);
                     convertBitToBite(bitmapResize);
@@ -264,7 +224,6 @@ public class ProfileFragment extends Fragment {
                     e.printStackTrace();
                 }
             }
-            item.setVisible(true);
         }
         else {
             Log.e("Upload image:: ",resultCode+"");
@@ -274,8 +233,8 @@ public class ProfileFragment extends Fragment {
 
     //    Request runtime permission android method
     private void requestPermission(){
-        if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),Manifest.permission.READ_EXTERNAL_STORAGE)){
-            new AlertDialog.Builder(getContext())
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.READ_EXTERNAL_STORAGE)){
+            new AlertDialog.Builder(this)
                     .setTitle("Permission needed")
                     .setMessage("We need to access your storage to get required data")
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -290,7 +249,7 @@ public class ProfileFragment extends Fragment {
                 }
             }).create().show();
         }else {
-            ActivityCompat.requestPermissions(getActivity(),new String[] {Manifest.permission.READ_EXTERNAL_STORAGE},STORAGE_PERMISSION_CODE);
+            ActivityCompat.requestPermissions(this,new String[] {Manifest.permission.READ_EXTERNAL_STORAGE},STORAGE_PERMISSION_CODE);
         }
     }
 
@@ -302,14 +261,15 @@ public class ProfileFragment extends Fragment {
                 iGallery.setType("image/*");
                 startActivityForResult(iGallery,REQUEST_IMAGE_GALLERY);
             }else {
-                Toast.makeText(getContext(),"Permission DENIED",Toast.LENGTH_LONG).show();
+                Toast.makeText(this,"Permission DENIED",Toast.LENGTH_LONG).show();
             }
         }
     }
 
+
     //    Convert from bitmap picture
     public void convertBitToBite(Bitmap bitmap) throws IOException {
-        f = new File(getContext().getCacheDir(),"imageToUpload");
+        f = new File(getApplicationContext().getCacheDir(),"imageToUpload");
         f.createNewFile();
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG,100,byteArrayOutputStream);
@@ -321,26 +281,4 @@ public class ProfileFragment extends Fragment {
         fileOutputStream.close();
 
     }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        menu.clear();
-        inflater.inflate(R.menu.add_news_admin_action_bar,menu);
-        item = menu.findItem(R.id.add_news);
-        item.setVisible(false);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.add_news){
-            changeProfile();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-
 }

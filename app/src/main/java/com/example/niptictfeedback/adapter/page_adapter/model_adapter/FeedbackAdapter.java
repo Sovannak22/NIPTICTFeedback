@@ -8,6 +8,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.niptictfeedback.CommentActivity;
 import com.example.niptictfeedback.MyApplication;
@@ -56,6 +58,11 @@ public class FeedbackAdapter extends RecyclerView.Adapter<FeedbackAdapter.MyView
                 intent.putExtra("FeedbackID",id);
                 context.startActivity(intent);
             }
+
+            @Override
+            public void onMore(int p) {
+                Log.e("More","clicked");
+            }
         });
         mOnClickListener = new View.OnClickListener() {
             @Override
@@ -65,28 +72,10 @@ public class FeedbackAdapter extends RecyclerView.Adapter<FeedbackAdapter.MyView
                 Intent intent = new Intent(context, CommentActivity.class);
 
                 intent.putExtra("FeedbackID",feedBack.getId());
-                intent.putExtra("PreviousActivity",previousActivity);
                 context.startActivity(intent);
 
             }
         };
-//        mOnClickListener = new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                AppCompatActivity appCompatActivity  = (AppCompatActivity)v.getContext();
-//                int itemPos = recyclerView.getChildLayoutPosition(v);
-//                News news = newsList.get(itemPos);
-//
-//                Intent intent = new Intent(context, NewInfoActivity.class);
-//                intent.putExtra("ImageUrl",news.getImage_url());
-//                intent.putExtra("Title",news.getTitle());
-//                intent.putExtra("Description",news.getDescription());
-//                context.startActivity(intent);
-//
-//
-//            }
-//        };
-//        myView.setOnClickListener(mOnClickListener);
         return holder;
 
     }
@@ -131,6 +120,8 @@ public class FeedbackAdapter extends RecyclerView.Adapter<FeedbackAdapter.MyView
                 case R.id.btn_comment_custom_feedback:
                     myClickListener.onComment(this.getLayoutPosition());
                     break;
+                case R.id.btn_more_feedback:
+
                 default:
                     break;
             }
@@ -138,6 +129,7 @@ public class FeedbackAdapter extends RecyclerView.Adapter<FeedbackAdapter.MyView
 
         public interface MyClickListener {
             void onComment(int p);
+            void onMore(int p);
         }
     }
 

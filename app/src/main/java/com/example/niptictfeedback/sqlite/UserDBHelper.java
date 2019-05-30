@@ -19,6 +19,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
     private static final String USER_NAME = "name";
     private static final String USER_ROLE_ID = "user_role_id";
     private static final String PROFILE_PICTURE = "profile_img";
+    private static final String USER_ID =   "id";
 
     public UserDBHelper(Context context) {
         super(context, DB_NAME, null, 1);
@@ -29,11 +30,11 @@ public class UserDBHelper extends SQLiteOpenHelper {
         db.execSQL("create table "+TABLE_NAME+"(id integer primary key,name text,student_id text,password text,user_role_id text,profile_img text )");
     }
 
-    public void insertUser(String name,String password,String student_id,String user_role_id,String profile_img){
+    public void insertUser(String id,String name,String password,String student_id,String user_role_id,String profile_img){
 
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put("id",1);
+        values.put(USER_ID,id);
         values.put(USER_NAME,name);
         values.put(STUDENT_ID,student_id);
         values.put(PASSWORD,password);
@@ -52,11 +53,11 @@ public class UserDBHelper extends SQLiteOpenHelper {
     public User getLoginUser(){
         User user = null;
         SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM "+TABLE_NAME+" WHERE id=1",null);
+        Cursor cursor = db.rawQuery("SELECT * FROM "+TABLE_NAME,null);
 
         if (cursor.getCount()>0){
             cursor.moveToFirst();
-            user = new User(cursor.getString(2),cursor.getString(1),cursor.getString(3),cursor.getString(4),cursor.getString(5));
+            user = new User(cursor.getString(0),cursor.getString(2),cursor.getString(1),cursor.getString(3),cursor.getString(4),cursor.getString(5));
         }
         return user;
 

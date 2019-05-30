@@ -1,7 +1,7 @@
 package com.example.niptictfeedback.models;
 
 public class User {
-    private int id;
+    private String id;
     private String name,email,password,user_role_id,phone_number,gender,dob,profile_img,moreInfo,cPassword,message,token,access_token,token_type,stu_id;
 
     public String getMessage() {
@@ -34,7 +34,8 @@ public class User {
         this.cPassword = cPassword;
     }
 
-    public User(String stu_id, String name, String password, String user_role_id,String profile_img) {
+    public User(String id,String stu_id, String name, String password, String user_role_id,String profile_img) {
+        this.id = id;
         this.stu_id = stu_id;
         this.name = name;
         this.password = password;
@@ -46,7 +47,7 @@ public class User {
         return cPassword;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 

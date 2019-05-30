@@ -4,24 +4,37 @@
     android:layout_height="wrap_content"
     android:background="@color/colorAccent"
     android:layout_marginBottom="@dimen/paddingSize">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:orientation="horizontal">
+
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/feed_profile_image"
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_gravity="center"
             android:layout_marginHorizontal="@dimen/paddingSize"
-            android:src="@drawable/zidane"/>
+            android:src="@drawable/zidane" />
+
         <TextView
             android:id="@+id/tv_username_feedback"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/text_size"
+            android:layout_gravity="center"
             android:text="Username"
-            android:layout_gravity="center"/>
+            android:textSize="@dimen/text_size" />
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"></LinearLayout>
+        <ImageView
+            android:id="@+id/btn_more_feedback"
+            android:layout_width="25dp"
+            android:layout_height="50dp"
+            android:layout_gravity="right"
+            android:src="@drawable/ic_more_vert_24dp" />
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"

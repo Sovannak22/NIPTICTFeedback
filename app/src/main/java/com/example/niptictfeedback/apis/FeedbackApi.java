@@ -35,7 +35,6 @@ public interface FeedbackApi {
     Call<FeedBack> createFeedback(
             @Header("Authorization") String header,
             @Part MultipartBody.Part image,
-            @Part("title") RequestBody title,
             @Part("description") RequestBody description,
             @Part("place_id") RequestBody placeId,
             @Part("feedback_type_id") RequestBody feedbackTypeId

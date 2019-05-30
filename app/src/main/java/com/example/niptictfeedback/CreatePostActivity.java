@@ -52,7 +52,7 @@ public class CreatePostActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private LinearLayout btnPrivacy,btnUploadPic,backgroundLoading;
     private FeedbackApi feedbackApi;
-    private EditText txtTitle,txtDescription;
+    private EditText txtDescription;
     private ImageView imageUploaded;
     private Dialog dialog;
     private String privacy="1",privacyString="public";
@@ -78,7 +78,6 @@ public class CreatePostActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.tool_bar_create_post);
         btnPrivacy = findViewById(R.id.btn_privacy_create_post);
         btnUploadPic = findViewById(R.id.upload_pic_add_feedback);
-        txtTitle = findViewById(R.id.txt_title_add_feedback);
         txtDescription = findViewById(R.id.txt_description_add_feedback);
         imageUploaded = findViewById(R.id.image_upload_add_feedback);
         backgroundLoading = findViewById(R.id.loading_background_add_feedback);
@@ -134,9 +133,7 @@ public class CreatePostActivity extends AppCompatActivity {
     }
 
     public void createFeedback(){
-        String title = txtTitle.getText().toString();
         String description = txtDescription.getText().toString();
-        RequestBody titlePart = RequestBody.create(MultipartBody.FORM,title);
         RequestBody descriptionPart = RequestBody.create(MultipartBody.FORM,description);
         RequestBody placeIdPart = RequestBody.create(MultipartBody.FORM,intent.getStringExtra("PlaceId"));
         RequestBody feedbackTypeIdPart = RequestBody.create(MultipartBody.FORM,privacy);
@@ -146,7 +143,7 @@ public class CreatePostActivity extends AppCompatActivity {
             body = MultipartBody.Part.createFormData("img","fileAndroid", reqFile);
         }
         String auth=((MyApplication) getApplicationContext()).getAuthorization();
-        Call call = feedbackApi.createFeedback(auth,body,titlePart,descriptionPart,placeIdPart,feedbackTypeIdPart);
+        Call call = feedbackApi.createFeedback(auth,body,descriptionPart,placeIdPart,feedbackTypeIdPart);
         call.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {
@@ -167,7 +164,7 @@ public class CreatePostActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call call, Throwable t) {
-                Log.w("Register fail::",t.getMessage());
+                Log.w("Register fail::",t.getMessage()+"");
                 rotateLoading.stop();
                 backgroundLoading.setVisibility(View.GONE);
             }

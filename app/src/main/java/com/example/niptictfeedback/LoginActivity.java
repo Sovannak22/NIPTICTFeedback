@@ -138,7 +138,7 @@ public class LoginActivity extends AppCompatActivity {
                 Log.w("stu_id::",stuId+"");
                 Log.w("password",password+"");
                 userDBHelper.createNewTable();
-                userDBHelper.insertUser(userResponce.getName(),password,stuId,userResponce.getUser_role_id(),userResponce.getProfileImg());
+                userDBHelper.insertUser(userResponce.getId(),userResponce.getName(),password,stuId,userResponce.getUser_role_id(),userResponce.getProfileImg());
 
                 loginDirect(userResponce);
                 rotateLoading.stop();

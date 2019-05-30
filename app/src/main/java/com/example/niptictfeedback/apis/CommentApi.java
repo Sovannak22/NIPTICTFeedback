@@ -26,4 +26,9 @@ public interface CommentApi {
     Call<Comment> createComment(@Header("Authorization") String header
             , @Field("description") String description
             ,@Field("feedback_id") String feedback_id);
+
+    @FormUrlEncoded
+    @Headers({"Accept: application/json"})
+    @POST("api/comments/{id}")
+    Call<Comment> deleteComment(@Header("Authorization") String header, @Path("id") String commentId, @Field("_method") String method);
 }

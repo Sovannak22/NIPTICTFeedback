@@ -27,6 +27,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.niptictfeedback.apis.NewsApi;
+import com.example.niptictfeedback.models.News;
 import com.victor.loading.rotate.RotateLoading;
 
 import java.io.ByteArrayOutputStream;
@@ -93,10 +94,10 @@ public class AddNewsActivity extends AppCompatActivity {
             body = MultipartBody.Part.createFormData("image","fileAndroid", reqFile);
         }
         String auth=((MyApplication) getApplicationContext()).getAuthorization();
-        Call call = newsApi.createNews(auth,body,titlePart,descriptionPart);
-        call.enqueue(new Callback() {
+        Call<News> call = newsApi.createNews(auth,body,titlePart,descriptionPart);
+        call.enqueue(new Callback<News>() {
             @Override
-            public void onResponse(Call call, Response response) {
+            public void onResponse(Call<News> call, Response<News> response) {
                 if (!response.isSuccessful()){
                     Log.w("Register:: ",response.code()+""+response.message());
                     return;
@@ -111,8 +112,9 @@ public class AddNewsActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call call, Throwable t) {
-                Log.w("Register fail::",t.getMessage());
+            public void onFailure(Call<News> call, Throwable t) {
+                Log.w("Register fail::",t.getMessage()+"");
+                rotateLoading.stop();
             }
         });
     }
@@ -183,7 +185,7 @@ public class AddNewsActivity extends AppCompatActivity {
                 try {
                     thumbnail = MediaStore.Images.Media.getBitmap(
                             getContentResolver(), imageUri);
-                    Bitmap bitmapResize = Bitmap.createScaledBitmap(thumbnail,1000,750,true);
+                    Bitmap bitmapResize = Bitmap.createScaledBitmap(thumbnail,500,350,true);
                     imageUploaded.setImageBitmap(thumbnail);
                     convertBitToBite(bitmapResize);
                     dialog.dismiss();

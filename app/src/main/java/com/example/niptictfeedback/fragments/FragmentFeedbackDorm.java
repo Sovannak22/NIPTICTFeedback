@@ -1,6 +1,7 @@
 package com.example.niptictfeedback.fragments;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -39,6 +40,8 @@ public class FragmentFeedbackDorm extends Fragment implements SwipeRefreshLayout
     private LinearLayout noPostFound;
     SwipeRefreshLayout swipeRefreshLayout;
 
+    private Parcelable recyclerViewState;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -51,6 +54,8 @@ public class FragmentFeedbackDorm extends Fragment implements SwipeRefreshLayout
         alertPopUp = v.findViewById(R.id.alert_popup_user_news);
         feedBacks = new ArrayList<>();
         recyclerView = v.findViewById(R.id.rcl_news_user);
+
+
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         noPostFound = v.findViewById(R.id.no_new_found);
@@ -87,7 +92,7 @@ public class FragmentFeedbackDorm extends Fragment implements SwipeRefreshLayout
                 feedBacks= response.body();
                 if (feedBacks.size()>0){
                     swipeRefreshLayout.setRefreshing(false);
-                    feedbackAdapter = new FeedbackAdapter(feedBacks,getContext(),recyclerView,"AppActivity");
+                    feedbackAdapter = new FeedbackAdapter(feedBacks,getContext(),recyclerView);
                     recyclerView.setAdapter(feedbackAdapter);
                     return;
                 }
@@ -109,12 +114,65 @@ public class FragmentFeedbackDorm extends Fragment implements SwipeRefreshLayout
         });
     }
 
+
+    public void getNewFeedbacks(){
+//        swipeRefreshLayout.setRefreshing(true);
+        String auth=((MyApplication) getActivity().getApplication()).getAuthorization();
+        Call<List<FeedBack>> call = feedbackApi.getFeedbackWithId(auth,1);
+        call.enqueue(new Callback<List<FeedBack>>() {
+            @Override
+            public void onResponse(Call<List<FeedBack>> call, Response<List<FeedBack>> response) {
+                if (!response.isSuccessful()){
+                    Noty.init(getContext(), "Oops something went wrong!", alertPopUp,
+                            Noty.WarningStyle.SIMPLE)
+                            .setAnimation(Noty.RevealAnim.SLIDE_UP, Noty.DismissAnim.BACK_TO_BOTTOM, 400,400)
+                            .setWarningInset(0,0,0,0)
+                            .setWarningBoxRadius(0,0,0,0)
+                            .show();
+//                    swipeRefreshLayout.setRefreshing(false);
+                    return;
+                }
+                List<FeedBack> feedBacks1 = new ArrayList<>();
+                feedBacks1= response.body();
+                if (feedBacks1.size()>0){
+//                    swipeRefreshLayout.setRefreshing(false);
+                    feedBacks.clear();
+                    feedBacks.addAll(feedBacks1);
+                    feedbackAdapter.notifyDataSetChanged();
+                    return;
+                }
+//                swipeRefreshLayout.setRefreshing(false);
+                noPostFound.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onFailure(Call<List<FeedBack>> call, Throwable t) {
+                Log.e("Get news::","Fail");
+                Noty.init(getContext(), "No internet connection!", alertPopUp,
+                        Noty.WarningStyle.SIMPLE)
+                        .setAnimation(Noty.RevealAnim.SLIDE_UP, Noty.DismissAnim.BACK_TO_BOTTOM, 400,400)
+                        .setWarningInset(0,0,0,0)
+                        .setWarningBoxRadius(0,0,0,0)
+                        .show();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (feedBacks.size()>0){
+            getNewFeedbacks();
+        }
+    }
+
     @Override
     public void onRefresh() {
         getFeedbacks();
     }
 
-    private void onLoadingRefresh(){
+    public void onLoadingRefresh(){
         swipeRefreshLayout.post(new Runnable() {
             @Override
             public void run() {
@@ -122,4 +180,12 @@ public class FragmentFeedbackDorm extends Fragment implements SwipeRefreshLayout
             }
         });
     }
+    private int mScrollY;
+    private RecyclerView.OnScrollListener mTotalScrollListener = new RecyclerView.OnScrollListener() {
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+            mScrollY += dy;
+        }
+    };
 }

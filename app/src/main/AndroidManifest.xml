@@ -21,10 +21,12 @@
         <activity android:name=".AddNewsActivity" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".LoginActivity" />
-        <activity android:name=".AppActivity" />
+        <activity android:name=".AppActivity"
+            android:exported="true"/>
         <activity android:name=".NewsAdminActivity" />
         <activity android:name=".SelectPrivacyActivity" />
         <activity android:name=".UpdateNewsActivity"/>
+        <activity android:name=".EditPostActivity"/>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

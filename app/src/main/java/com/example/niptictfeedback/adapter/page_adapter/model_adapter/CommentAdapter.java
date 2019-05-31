@@ -86,8 +86,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.MyViewHo
         }
     }
 
-
-
     @Override
     public int getItemCount() {
         return comments.size();
@@ -109,4 +107,5 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.MyViewHo
         String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), inImage, "Title", null);
         return Uri.parse(path);
     }
+
 }

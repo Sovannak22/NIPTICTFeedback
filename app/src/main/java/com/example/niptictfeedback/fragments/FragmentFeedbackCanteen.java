@@ -87,7 +87,7 @@ public class FragmentFeedbackCanteen extends Fragment implements SwipeRefreshLay
                 }
                 feedBacks= response.body();
                 if (feedBacks.size()>0){
-                    feedbackAdapter = new FeedbackAdapter(feedBacks,getContext(),recyclerView,"AppActivity");
+                    feedbackAdapter = new FeedbackAdapter(feedBacks,getContext(),recyclerView);
                     recyclerView.setAdapter(feedbackAdapter);
                     swipeRefreshLayout.setRefreshing(false);
                     return;

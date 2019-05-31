@@ -223,7 +223,8 @@
         android:id="@+id/loding_bg_register"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#aaffffff">
+        android:background="#aaffffff"
+        android:gravity="center">
         <com.victor.loading.rotate.RotateLoading
             android:id="@+id/rotate_loading_register"
             android:layout_width="100dp"

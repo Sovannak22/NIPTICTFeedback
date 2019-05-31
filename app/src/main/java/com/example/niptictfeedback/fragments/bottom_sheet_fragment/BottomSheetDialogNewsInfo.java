@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
@@ -31,7 +32,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class BottomSheetDialogNewsInfo extends BottomSheetDialogFragment {
 
 
-    private LinearLayout btnEditNews,btnDeleteNews;
+    private LinearLayout btnEditNews,btnDeleteNews,btnCancel;
     private Bundle bundle;
     private NewsApi newsApi;
     public static BottomSheetDialogNewsInfo newInstance() {
@@ -44,8 +45,17 @@ public class BottomSheetDialogNewsInfo extends BottomSheetDialogFragment {
         View v = inflater.inflate(R.layout.bottom_sheet_layout_news_info,container,false);
         btnEditNews = v.findViewById(R.id.btn_edit_news);
         btnDeleteNews = v.findViewById(R.id.btn_delete_news);
+        btnCancel = v.findViewById(R.id.btn_cancel_news_bottom_sheet);
 
         bundle = getArguments();
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment fragment = getActivity().getSupportFragmentManager().findFragmentByTag("news_more_option_dialog");
+                getActivity().getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+            }
+        });
 
         btnEditNews.setOnClickListener(new View.OnClickListener() {
             @Override

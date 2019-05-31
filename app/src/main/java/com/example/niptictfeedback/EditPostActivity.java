@@ -9,14 +9,13 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.preference.PreferenceManager;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -45,7 +44,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class CreatePostActivity extends AppCompatActivity {
+public class EditPostActivity extends AppCompatActivity {
 
     private Intent intent;
     private TextView tvPlace,tvPrivacy;
@@ -68,37 +67,47 @@ public class CreatePostActivity extends AppCompatActivity {
 
     private RotateLoading rotateLoading;
 
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_post);
+        setContentView(R.layout.activity_edit_post);
+
         intent = getIntent();
-        tvPlace = findViewById(R.id.tv_place_create_post);
-        toolbar = findViewById(R.id.tool_bar_create_post);
-        btnPrivacy = findViewById(R.id.btn_privacy_create_post);
-        btnUploadPic = findViewById(R.id.upload_pic_add_feedback);
-        txtDescription = findViewById(R.id.txt_description_add_feedback);
-        imageUploaded = findViewById(R.id.image_upload_add_feedback);
-        backgroundLoading = findViewById(R.id.loading_background_add_feedback);
+        tvPlace = findViewById(R.id.tv_place_edit_post);
+        toolbar = findViewById(R.id.tool_bar_edit_post);
+        btnPrivacy = findViewById(R.id.btn_privacy_edit_post);
+        btnUploadPic = findViewById(R.id.upload_pic_edit_post);
+        txtDescription = findViewById(R.id.txt_description_edit_post);
+        imageUploaded = findViewById(R.id.image_upload_edit_post);
+        backgroundLoading = findViewById(R.id.loading_background_edit_post);
         backgroundLoading.setVisibility(View.GONE);
-        rotateLoading = findViewById(R.id.rotate_loading_add_feedback);
-        tvPrivacy = findViewById(R.id.privacy_text_post);
+        rotateLoading = findViewById(R.id.rotate_loading_edit_post);
+        tvPrivacy = findViewById(R.id.privacy_text_edit_post);
         privacyIcon = findViewById(R.id.privacy_icon_post);
 
         dialog = new Dialog(this);
 
-        tvPlace.setText(intent.getStringExtra("Place"));
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        String placId = intent.getStringExtra("PlaceID");
+        txtDescription.setText(intent.getStringExtra("Description"));
+
+        if (placId.equals("1")){
+            tvPlace.setText("Dorm");
+        }else {
+            tvPlace.setText("Canteen");
+        }
 
         btnPrivacy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(CreatePostActivity.this,SelectPrivacyActivity.class);
+                Intent intent = new Intent(EditPostActivity.this,SelectPrivacyActivity.class);
                 startActivityForResult(intent,REQUEST_PRIVACY_CODE);
             }
         });
+
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         String baseUrl=((MyApplication) getApplicationContext()).getBaseUrl();
         Retrofit retrofit = new Retrofit.Builder()
@@ -106,8 +115,8 @@ public class CreatePostActivity extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         feedbackApi = retrofit.create(FeedbackApi.class);
-
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -122,48 +131,48 @@ public class CreatePostActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.add_news){
-            Toast.makeText(getApplicationContext(),"Add new clicked",Toast.LENGTH_LONG).show();
+//            Toast.makeText(getApplicationContext(),"Add new clicked",Toast.LENGTH_LONG).show();
             backgroundLoading.setVisibility(View.VISIBLE);
             rotateLoading.start();
-            createFeedback();
+            editFeedback();
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    public void createFeedback(){
+    public void editFeedback(){
         String description = txtDescription.getText().toString();
         RequestBody descriptionPart = RequestBody.create(MultipartBody.FORM,description);
-        RequestBody placeIdPart = RequestBody.create(MultipartBody.FORM,intent.getStringExtra("PlaceId"));
         RequestBody feedbackTypeIdPart = RequestBody.create(MultipartBody.FORM,privacy);
+        RequestBody methodPart = RequestBody.create(MultipartBody.FORM,"PUT");
         MultipartBody.Part body=null;
         if (f != null){
             RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), f);
             body = MultipartBody.Part.createFormData("img","fileAndroid", reqFile);
         }
         String auth=((MyApplication) getApplicationContext()).getAuthorization();
-        Call call = feedbackApi.createFeedback(auth,body,descriptionPart,placeIdPart,feedbackTypeIdPart);
+        Call call = feedbackApi.editFeedback(auth,intent.getStringExtra("FeedbackID"),body,descriptionPart,feedbackTypeIdPart,methodPart);
         call.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {
                 if (!response.isSuccessful()){
-                    Log.w("Register:: ",response.code()+""+response.message());
+                    Log.w("EditFeedback:: ",response.code()+""+response.message());
                     rotateLoading.stop();
                     backgroundLoading.setVisibility(View.GONE);
                     return;
                 }
 
-                Log.w("Register:: ","Successfully "+response);
-                Intent intent = new Intent(CreatePostActivity.this,AppActivity.class);
+                Log.w("EditFeedback:: ","Successfully "+response);
+                Intent intent = new Intent(EditPostActivity.this,AppActivity.class);
                 startActivity(intent);
-                Toast.makeText(getApplicationContext(),"News has added",Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),"Feedback has been edited",Toast.LENGTH_LONG).show();
                 rotateLoading.stop();
                 finish();
             }
 
             @Override
             public void onFailure(Call call, Throwable t) {
-                Log.w("Register fail::",t.getMessage()+"");
+                Log.w("Edit feedback fail::",t.getMessage()+"");
                 rotateLoading.stop();
                 backgroundLoading.setVisibility(View.GONE);
             }
@@ -179,7 +188,7 @@ public class CreatePostActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent iGallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                if (ContextCompat.checkSelfPermission(CreatePostActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)== PackageManager.PERMISSION_GRANTED){
+                if (ContextCompat.checkSelfPermission(EditPostActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)== PackageManager.PERMISSION_GRANTED){
                     iGallery.setType("image/*");
                     startActivityForResult(iGallery,REQUEST_IMAGE_GALLERY);
                 }else {
@@ -287,7 +296,7 @@ public class CreatePostActivity extends AppCompatActivity {
 
     }
 
-    //TODO::    Convert from bitmap picture to bite array
+    //TODO::Convert from bitmap picture to bite array
     public void convertBitToBite(Bitmap bitmap) throws IOException {
         f = new File(getApplicationContext().getCacheDir(),"imageToUpload");
         f.createNewFile();

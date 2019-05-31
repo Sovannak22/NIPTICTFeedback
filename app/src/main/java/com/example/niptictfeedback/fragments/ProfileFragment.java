@@ -201,8 +201,9 @@ public class ProfileFragment extends Fragment {
         btnOpenCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent iGallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
                 if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE)== PackageManager.PERMISSION_GRANTED){
+                    Intent iGallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                     iGallery.setType("image/*");
                     startActivityForResult(iGallery,REQUEST_IMAGE_GALLERY);
                 }else {
@@ -256,7 +257,7 @@ public class ProfileFragment extends Fragment {
                     bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(),uri);
                     cameraProfile.setImageBitmap(bitmap);
                     Log.e("Upload image:: ","Gallerry");
-                    Bitmap bitmapResize = Bitmap.createScaledBitmap(bitmap,1000,750,true);
+                    Bitmap bitmapResize = Bitmap.createScaledBitmap(bitmap,500,350,true);
                     convertBitToBite(bitmapResize);
                     dialog.dismiss();
                 } catch (IOException e) {

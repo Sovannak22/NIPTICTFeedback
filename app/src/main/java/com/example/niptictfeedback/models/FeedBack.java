@@ -1,8 +1,8 @@
 package com.example.niptictfeedback.models;
 
 public class FeedBack {
-    private int user_id,place_id,feedback_type_id;
-    private String title,description,id;
+    private int place_id,feedback_type_id;
+    private String user_id,title,description,id;
     private String img,comments_count,username,profile_img;
 
     public String getProfile_img() {
@@ -31,7 +31,7 @@ public class FeedBack {
         this.img = img;
     }
 
-    public int getUser_id() {
+    public String getUser_id() {
         return user_id;
     }
 

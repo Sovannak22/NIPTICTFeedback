@@ -7,6 +7,8 @@ import java.util.List;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
@@ -39,4 +41,21 @@ public interface FeedbackApi {
             @Part("place_id") RequestBody placeId,
             @Part("feedback_type_id") RequestBody feedbackTypeId
     );
+
+    @Multipart
+    @Headers({"Accept: application/json"})
+    @POST("api/feedbacks/{id}")
+    Call<FeedBack> editFeedback(
+            @Header("Authorization") String header,
+            @Path("id") String id,
+            @Part MultipartBody.Part image,
+            @Part("description") RequestBody description,
+            @Part("feedback_type_id") RequestBody feedbackTypeId,
+            @Part("_method") RequestBody method
+    );
+
+    @FormUrlEncoded
+    @Headers({"Accept: application/json"})
+    @POST("api/feedbacks/{id}")
+    Call<FeedBack> deletFeedback(@Header("Authorization") String header, @Path("id") String id, @Field("_method") String method);
 }

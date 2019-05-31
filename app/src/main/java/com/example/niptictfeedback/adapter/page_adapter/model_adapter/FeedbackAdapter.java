@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -21,7 +22,10 @@ import android.widget.Toast;
 import com.example.niptictfeedback.CommentActivity;
 import com.example.niptictfeedback.MyApplication;
 import com.example.niptictfeedback.R;
+import com.example.niptictfeedback.fragments.bottom_sheet_fragment.BottomSheetDialogFeedbacks;
 import com.example.niptictfeedback.models.FeedBack;
+import com.example.niptictfeedback.models.User;
+import com.example.niptictfeedback.sqlite.UserDBHelper;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
@@ -34,14 +38,14 @@ public class FeedbackAdapter extends RecyclerView.Adapter<FeedbackAdapter.MyView
     private Context context;
     private RecyclerView recyclerView;
     private String baseUrl;
-    private String previousActivity;
+    private static UserDBHelper userDBHelper;
 
-    public FeedbackAdapter(List<FeedBack> feedBacks, Context context,RecyclerView recyclerView,String previousActivity) {
+    public FeedbackAdapter(List<FeedBack> feedBacks, Context context,RecyclerView recyclerView) {
         this.feedBacks = feedBacks;
         this.context = context;
         this.recyclerView = recyclerView;
         this.baseUrl = ((MyApplication) context.getApplicationContext()).getBaseUrl();
-        this.previousActivity = previousActivity;
+        userDBHelper = new UserDBHelper(context);
     }
 
     @NonNull
@@ -53,6 +57,7 @@ public class FeedbackAdapter extends RecyclerView.Adapter<FeedbackAdapter.MyView
 
             @Override
             public void onComment(int p) {
+                Toast.makeText(context,"more clicked",Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(context,CommentActivity.class);
                 String id = feedBacks.get(p).getId();
                 intent.putExtra("FeedbackID",id);
@@ -61,21 +66,20 @@ public class FeedbackAdapter extends RecyclerView.Adapter<FeedbackAdapter.MyView
 
             @Override
             public void onMore(int p) {
-                Log.e("More","clicked");
+                Toast.makeText(context,"more clicked",Toast.LENGTH_LONG).show();
+                String id = feedBacks.get(p).getId();
+                String place_id = feedBacks.get(p).getPlace_id()+"";
+                String description = feedBacks.get(p).getDescription();
+                Bundle bundle = new Bundle();
+                bundle.putString("FeedbackID",id);
+                bundle.putString("PlaceID",place_id);
+                bundle.putString("Description",description);
+                BottomSheetDialogFeedbacks bottomSheetDialogNewsInfo = BottomSheetDialogFeedbacks.newInstance();
+                bottomSheetDialogNewsInfo.setArguments(bundle);
+                bottomSheetDialogNewsInfo.show(((AppCompatActivity)context).getSupportFragmentManager(),"feedback_more_option_dialog");
+
             }
         });
-        mOnClickListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int itemPos = recyclerView.getChildLayoutPosition(v);
-                FeedBack feedBack = feedBacks.get(itemPos);
-                Intent intent = new Intent(context, CommentActivity.class);
-
-                intent.putExtra("FeedbackID",feedBack.getId());
-                context.startActivity(intent);
-
-            }
-        };
         return holder;
 
     }
@@ -87,6 +91,12 @@ public class FeedbackAdapter extends RecyclerView.Adapter<FeedbackAdapter.MyView
         Picasso.get().load(baseUrl+(feedBacks.get(i).getProfile_img())).into(myViewHolder.feedProfileImage);
         myViewHolder.tvCommentsCount.setText(feedBacks.get(i).getComments_count());
         myViewHolder.tvUsername.setText(feedBacks.get(i).getUsername());
+
+        User user = userDBHelper.getLoginUser();
+        if (user.getId().equals(feedBacks.get(i).getUser_id())){
+            myViewHolder.btnMore.setVisibility(View.VISIBLE);
+            myViewHolder.tvUsername.setTextColor(context.getResources().getColor(R.color.startblue));
+        }
     }
 
 
@@ -98,12 +108,13 @@ public class FeedbackAdapter extends RecyclerView.Adapter<FeedbackAdapter.MyView
 
     public static class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView tvDescription,tvCommentsCount,tvUsername;
-        ImageView imageFeedback,feedProfileImage;
+        ImageView imageFeedback,feedProfileImage,btnMore;
         LinearLayout btnComment;
         MyClickListener myClickListener;
         public MyViewHolder(@NonNull View itemView,MyClickListener listener) {
             super(itemView);
             tvDescription = itemView.findViewById(R.id.tv_description_custom_feedback);
+            btnMore = itemView.findViewById(R.id.btn_more_feedback);
             imageFeedback = itemView.findViewById(R.id.img_custom_feedback);
             btnComment = itemView.findViewById(R.id.btn_comment_custom_feedback);
             tvCommentsCount = itemView.findViewById(R.id.tv_comments_count);
@@ -111,6 +122,10 @@ public class FeedbackAdapter extends RecyclerView.Adapter<FeedbackAdapter.MyView
             feedProfileImage = itemView.findViewById(R.id.feed_profile_image);
             this.myClickListener = listener;
             btnComment.setOnClickListener(this);
+            btnMore.setOnClickListener(this);
+            btnMore.setVisibility(View.GONE);
+
+
 
         }
 
@@ -121,7 +136,8 @@ public class FeedbackAdapter extends RecyclerView.Adapter<FeedbackAdapter.MyView
                     myClickListener.onComment(this.getLayoutPosition());
                     break;
                 case R.id.btn_more_feedback:
-
+                    myClickListener.onMore(this.getLayoutPosition());
+                    break;
                 default:
                     break;
             }

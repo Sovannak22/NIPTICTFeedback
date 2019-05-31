@@ -67,15 +67,16 @@
                 android:layout_gravity="center"/>
         </LinearLayout>
         <LinearLayout
-            android:id="@+id/btn_cancel"
+            android:id="@+id/btn_cancel_news_bottom_sheet"
             android:padding="@dimen/paddingSize"
-            android:background="@drawable/blue_white_background"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:background="@drawable/blue_radius_background"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
             android:layout_alignStart="@+id/comment_option_screen"
             android:layout_alignBottom="@+id/comment_option_screen"
             android:layout_margin="@dimen/paddingSize"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:gravity="center">
 
             <TextView
                 android:textColor="@color/colorAccent"

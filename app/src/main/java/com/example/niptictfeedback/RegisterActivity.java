@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.example.niptictfeedback.apis.UserApi;
 import com.example.niptictfeedback.models.User;
+import com.example.niptictfeedback.sqlite.UserDBHelper;
 import com.victor.loading.rotate.RotateLoading;
 
 import java.io.UnsupportedEncodingException;
@@ -49,6 +50,8 @@ public class RegisterActivity extends AppCompatActivity {
     private RotateLoading rotateLoading;
     private LinearLayout lodingBackground;
 
+    private UserDBHelper userDBHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +69,8 @@ public class RegisterActivity extends AppCompatActivity {
         lodingBackground.setVisibility(View.GONE);
 
         btnRegister = findViewById(R.id.btn_register);
+
+        userDBHelper = new UserDBHelper(this);
 
         tvLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -137,9 +142,8 @@ public class RegisterActivity extends AppCompatActivity {
                 String tokenType = "Bearer";
                 String accessToken = userResponce.getToken();
                 ((MyApplication) getApplicationContext()).setAuthorization(tokenType+" "+accessToken);
-                Intent intent = new Intent(RegisterActivity.this,AppActivity.class);
-                startActivity(intent);
-                finish();
+                getUserInfo();
+
             }
 
             @Override
@@ -147,6 +151,36 @@ public class RegisterActivity extends AppCompatActivity {
                 Log.w("Register fail::",t.getMessage());
                 lodingBackground.setVisibility(View.GONE);
                 rotateLoading.stop();
+            }
+        });
+    }
+
+    public void getUserInfo(){
+        String auth=((MyApplication) getApplicationContext()).getAuthorization();
+        Call<User> call = userApi.getUserInfo(auth);
+
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (!response.isSuccessful()){
+                    Log.w("Call ::",response.body()+"");
+                    return;
+                }
+                User userResponce = response.body();
+                Log.w("user",""+userResponce.getUser_role_id());
+                Log.w("stu_id::",stuId+"");
+                Log.w("password",password+"");
+                userDBHelper.createNewTable();
+                userDBHelper.insertUser(userResponce.getId(),userResponce.getName(),password,stuId,userResponce.getUser_role_id(),userResponce.getProfileImg());
+                rotateLoading.stop();
+                Intent intent = new Intent(RegisterActivity.this,AppActivity.class);
+                startActivity(intent);
+                finish();
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+
             }
         });
     }

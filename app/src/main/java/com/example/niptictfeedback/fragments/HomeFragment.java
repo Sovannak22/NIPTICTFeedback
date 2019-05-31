@@ -25,7 +25,7 @@ public class HomeFragment extends Fragment {
         btnDorm = v.findViewById(R.id.btn_dorm_home_user);
         btnCanteen = v.findViewById(R.id.btn_canteen_home_user);
         FragmentFeedbackDorm fragmentFeedbackDorm = new FragmentFeedbackDorm();
-        getChildFragmentManager().beginTransaction().add(R.id.feedbacks_user_container, fragmentFeedbackDorm).commit();
+        getChildFragmentManager().beginTransaction().add(R.id.feedbacks_user_container, fragmentFeedbackDorm,"Fragment_feedback_dorm").commit();
         btnDorm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -34,7 +34,7 @@ public class HomeFragment extends Fragment {
                 btnDorm.setTextColor(getResources().getColor(R.color.colorAccent));
                 btnCanteen.setTextColor(getResources().getColor(R.color.colorPrimary));
                 FragmentFeedbackDorm fragmentFeedbackDorm = new FragmentFeedbackDorm();
-                getChildFragmentManager().beginTransaction().replace(R.id.feedbacks_user_container, fragmentFeedbackDorm).commit();
+                getChildFragmentManager().beginTransaction().replace(R.id.feedbacks_user_container, fragmentFeedbackDorm,"Fragment_feedback_dorm").commit();
 
             }
         });
@@ -47,7 +47,7 @@ public class HomeFragment extends Fragment {
                 btnDorm.setTextColor(getResources().getColor(R.color.colorPrimary));
                 btnCanteen.setTextColor(getResources().getColor(R.color.colorAccent));
                 FragmentFeedbackCanteen fragmentFeedbackCanteen = new FragmentFeedbackCanteen();
-                getChildFragmentManager().beginTransaction().replace(R.id.feedbacks_user_container, fragmentFeedbackCanteen).commit();
+                getChildFragmentManager().beginTransaction().replace(R.id.feedbacks_user_container, fragmentFeedbackCanteen,"Fragment_feedback_canteen").commit();
             }
         });
         return v;

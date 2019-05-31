@@ -13,7 +13,7 @@
         android:orientation="vertical">
 
         <android.support.v7.widget.Toolbar
-            android:id="@+id/tool_bar_create_post"
+            android:id="@+id/tool_bar_edit_post"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/colorPrimaryDark"
@@ -54,7 +54,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/tv_place_create_post"
+                        android:id="@+id/tv_place_edit_post"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginVertical="@dimen/paddingSize"
@@ -65,7 +65,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/btn_privacy_create_post"
+                    android:id="@+id/btn_privacy_edit_post"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/grey_background"
@@ -76,7 +76,7 @@
                         android:layout_height="20dp"
                         android:src="@drawable/ic_public_24dp"/>
                     <TextView
-                        android:id="@+id/privacy_text_post"
+                        android:id="@+id/privacy_text_edit_post"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text=" Public"
@@ -101,7 +101,7 @@
                 android:background="@drawable/white_round_background">
 
                 <EditText
-                    android:id="@+id/txt_description_add_feedback"
+                    android:id="@+id/txt_description_edit_post"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginHorizontal="@dimen/paddingSize"
@@ -114,7 +114,7 @@
                     android:textSize="@dimen/text_size" />
 
                 <LinearLayout
-                    android:id="@+id/upload_pic_add_feedback"
+                    android:id="@+id/upload_pic_edit_post"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
@@ -147,20 +147,20 @@
             android:gravity="center">
 
             <ImageView
-                android:id="@+id/image_upload_add_feedback"
+                android:id="@+id/image_upload_edit_post"
                 android:layout_width="250dp"
                 android:layout_height="150dp" />
         </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/loading_background_add_feedback"
+        android:id="@+id/loading_background_edit_post"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#aaffffff"
         android:gravity="center">
         <com.victor.loading.rotate.RotateLoading
-            android:id="@+id/rotate_loading_add_feedback"
+            android:id="@+id/rotate_loading_edit_post"
             android:layout_width="100dp"
             android:layout_height="100dp"
             app:loading_color="@color/colorPrimary" />

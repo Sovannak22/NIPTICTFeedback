@@ -24,11 +24,17 @@ public class HomeAdmin extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar_admin_home);
         setSupportActionBar(toolbar);
 
-        linearLayoutMember = findViewById(R.id.ll_member);
+//        linearLayoutMember = findViewById(R.id.ll_member);
         linearLayoutPublic = findViewById(R.id.ll_public_post);
         linearLayoutPrivate = findViewById(R.id.ll_private);
         linearLayoutNews = findViewById(R.id.ll_new);
-
+        linearLayoutPublic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                intent = new Intent(HomeAdmin.this,PublicFeedbackAdminActivity.class);
+                startActivity(intent);
+            }
+        });
         linearLayoutNews.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

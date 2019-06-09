@@ -10,13 +10,22 @@
         android:layout_height="50dp"
         android:orientation="horizontal">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/feed_profile_image"
+        <RelativeLayout
             android:layout_width="35dp"
             android:layout_height="35dp"
-            android:layout_gravity="center"
-            android:layout_marginHorizontal="@dimen/paddingSize"
-            android:src="@drawable/zidane" />
+            android:layout_margin="@dimen/paddingSize">
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_gravity="center"
+                android:src="@drawable/default_profile" />
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/feed_profile_image"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_gravity="center"
+                android:src="@drawable/zidane" />
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/tv_username_feedback"
@@ -24,6 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="Username"
+            android:textColor="@color/colorPrimary"
             android:textSize="@dimen/text_size" />
         <LinearLayout
             android:layout_width="0dp"
@@ -62,22 +72,6 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginHorizontal="@dimen/paddingSize">
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/textSizeSmall"
-                android:text="0"
-                android:layout_marginHorizontal="@dimen/paddingSize"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/textSizeSmall"
-                android:text="Like"/>
-        </LinearLayout>
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"

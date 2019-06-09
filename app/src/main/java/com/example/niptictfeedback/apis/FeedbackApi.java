@@ -23,13 +23,23 @@ public interface FeedbackApi {
     @GET("api/feedbacks")
     Call<List<FeedBack>> getFeedback(@Header("Authorization") String header);
 
+    @GET("api/feedbacks/public/user/public")
+    Call<List<FeedBack>> getProfileFeedbackPublic(@Header("Authorization") String header);
+
+    @GET("api/feedbacks/public/user/private")
+    Call<List<FeedBack>> getProfileFeedbackPrivate(@Header("Authorization") String header);
+
     @Headers({"Accept: application/json"})
     @GET("api/feedbacks/public/place/{id}")
     Call<List<FeedBack>> getFeedbackWithId(@Header("Authorization") String header, @Path("id") int placeId);
 
     @Headers({"Accept: application/json"})
     @GET("api/feedbacks/private/place")
-    Call<List<FeedBack>> getPrivateFeedbackWithId(@Header("Authorization") String header);
+    Call<List<FeedBack>> getPrivateFeedbackAdmin(@Header("Authorization") String header);
+
+    @Headers({"Accept: application/json"})
+    @GET("api/feedbacks/public/place")
+    Call<List<FeedBack>> getPublicFeedbackAdmin(@Header("Authorization") String header);
 
     @Multipart
     @Headers({"Accept: application/json"})

@@ -60,7 +60,6 @@ public class FragmentFeedbackCanteen extends Fragment implements SwipeRefreshLay
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         feedbackApi = retrofit.create(FeedbackApi.class);
-//        getFeedbacks();
         onLoadingRefresh();
         return v;
 
@@ -109,6 +108,53 @@ public class FragmentFeedbackCanteen extends Fragment implements SwipeRefreshLay
         });
     }
 
+    public void getNewFeedbacks(){
+        String auth=((MyApplication) getActivity().getApplication()).getAuthorization();
+        Call<List<FeedBack>> call = feedbackApi.getFeedbackWithId(auth,2);
+        call.enqueue(new Callback<List<FeedBack>>() {
+            @Override
+            public void onResponse(Call<List<FeedBack>> call, Response<List<FeedBack>> response) {
+                if (!response.isSuccessful()){
+                    Noty.init(getContext(), "Oops something went wrong!", alertPopUp,
+                            Noty.WarningStyle.SIMPLE)
+                            .setAnimation(Noty.RevealAnim.SLIDE_UP, Noty.DismissAnim.BACK_TO_BOTTOM, 400,400)
+                            .setWarningInset(0,0,0,0)
+                            .setWarningBoxRadius(0,0,0,0)
+                            .show();
+                    return;
+                }
+                List<FeedBack> feedBacks1 = new ArrayList<>();
+                feedBacks1= response.body();
+                if (feedBacks1.size()>0){
+                    feedBacks.clear();
+                    feedBacks.addAll(feedBacks1);
+                    feedbackAdapter.notifyDataSetChanged();
+                    return;
+                }
+                noPostFound.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onFailure(Call<List<FeedBack>> call, Throwable t) {
+                Log.e("Get news::","Fail");
+                Noty.init(getContext(), "No internet connection!", alertPopUp,
+                        Noty.WarningStyle.SIMPLE)
+                        .setAnimation(Noty.RevealAnim.SLIDE_UP, Noty.DismissAnim.BACK_TO_BOTTOM, 400,400)
+                        .setWarningInset(0,0,0,0)
+                        .setWarningBoxRadius(0,0,0,0)
+                        .show();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.w("Back"," Resuome");
+        if (feedBacks.size()>0){
+            getNewFeedbacks();
+        }
+    }
     @Override
     public void onRefresh() {
         getFeedbacks();

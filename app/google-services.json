@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "147565032882",
+    "firebase_url": "https://feedbackapp-cb971.firebaseio.com",
+    "project_id": "feedbackapp-cb971",
+    "storage_bucket": "feedbackapp-cb971.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:147565032882:android:3553aba6826100a4",
+        "android_client_info": {
+          "package_name": "com.example.niptictfeedback"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "147565032882-7lt353fo1go7opui7r1gsjamjhla956f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZysCiAyHfKowNDSN45W5kKawHTO3zJK8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "147565032882-7lt353fo1go7opui7r1gsjamjhla956f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

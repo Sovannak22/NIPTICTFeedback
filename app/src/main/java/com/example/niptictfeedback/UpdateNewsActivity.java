@@ -54,6 +54,7 @@ public class UpdateNewsActivity extends AppCompatActivity {
     ImageView imageUploaded;
     EditText txtTitle,txtDescription;
     NewsApi newsApi;
+    LinearLayout loadingBg;
     private final int STORAGE_PERMISSION_CODE=3;
 
     ContentValues values;
@@ -72,6 +73,9 @@ public class UpdateNewsActivity extends AppCompatActivity {
 
         toolbar = findViewById(R.id.toolbar_admin_news);
         setSupportActionBar(toolbar);
+
+        loadingBg = findViewById(R.id.loding_bg_add_news);
+        loadingBg.setVisibility(View.GONE);
 
         dialog = new Dialog(this);
         imageUploaded = findViewById(R.id.image_upload);
@@ -114,6 +118,8 @@ public class UpdateNewsActivity extends AppCompatActivity {
                 if (!response.isSuccessful()){
                     Log.w("Register:: ",response.code()+""+response.message());
                     Toast.makeText(getBaseContext(),"Update news unsuccessfull",Toast.LENGTH_SHORT).show();
+                    rotateLoading.stop();
+                    loadingBg.setVisibility(View.GONE);
                     return;
                 }
                 Log.w("Register:: ","Successfully "+response);
@@ -121,11 +127,14 @@ public class UpdateNewsActivity extends AppCompatActivity {
                 startActivity(intent);
                 Toast.makeText(getApplicationContext(),"News has Updated",Toast.LENGTH_LONG).show();
                 rotateLoading.stop();
+                loadingBg.setVisibility(View.GONE);
                 finish();
             }
 
             @Override
             public void onFailure(Call<News> call, Throwable t) {
+                rotateLoading.stop();
+                loadingBg.setVisibility(View.GONE);
                 Log.w("Register fail::",t.getMessage());
                 Toast.makeText(getBaseContext(),"Update news unsuccessfull",Toast.LENGTH_SHORT).show();
             }
@@ -147,6 +156,7 @@ public class UpdateNewsActivity extends AppCompatActivity {
         if (id == R.id.add_news){
             Toast.makeText(getApplicationContext(),"Add new clicked",Toast.LENGTH_LONG).show();
             rotateLoading.start();
+            loadingBg.setVisibility(View.VISIBLE);
             updateNews(intent.getStringExtra("NewsID"));
             return true;
         }

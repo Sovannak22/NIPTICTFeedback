@@ -129,14 +129,9 @@ public class BottomSheetDialogFeedbacks extends BottomSheetDialogFragment {
                     return;
                 }
                 Toast.makeText(getContext(),"News Delete successfully",Toast.LENGTH_SHORT).show();
-//                Fragment frg = null;
-//                frg = getActivity().getSupportFragmentManager().findFragmentByTag("Fragment_feedback_dorm");
-//                final FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-//                ft.detach(frg);
-//                ft.attach(frg);
-//                ft.commit();
+
                 Fragment fragment = getActivity().getSupportFragmentManager().findFragmentByTag("feedback_more_option_dialog");
-                getActivity().getSupportFragmentManager().beginTransaction().remove(fragment);
+                getActivity().getSupportFragmentManager().beginTransaction().remove(fragment).commit();
 //                fragment = getActivity().getSupportFragmentManager().findFragmentByTag("Fragment_feedback_dorm_first");
 //                getActivity().getSupportFragmentManager().beginTransaction().detach(fragment);
 //                getActivity().getSupportFragmentManager().beginTransaction().attach(fragment);

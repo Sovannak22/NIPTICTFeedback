@@ -92,16 +92,13 @@ public class UserDBHelper extends SQLiteOpenHelper {
         return false;
     }
 
-    public void updateProfilePic(String profile_image){
+    public void updateProfilePic(String profile_image,String user_id){
 
         SQLiteDatabase db = getWritableDatabase();
 
-        ContentValues cv = new ContentValues();
+        String sql = "UPDATE "+TABLE_NAME +" SET profile_img = '"+profile_image+"' WHERE  id="+user_id;
 
-        cv.put("profile_img",profile_image);
-
-        db.update(TABLE_NAME,cv,"id=1",null);
-
+        db.execSQL(sql);
 
 
     }

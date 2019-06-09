@@ -4,13 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddNewsActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".AddNewsActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar_admin_news"
             android:layout_width="match_parent"
@@ -21,116 +22,136 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_margin="@dimen/paddingSize"
             android:layout_weight="1"
-            android:orientation="horizontal"
-            android:layout_margin="@dimen/paddingSize">
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:layout_margin="@dimen/paddingSize"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:orientation="horizontal">
+
+            <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
+                android:layout_margin="@dimen/paddingSize"
                 android:src="@drawable/zidane"
-                app:civ_border_width="2dp"
                 app:civ_border_color="#FF000000"
-                />
+                app:civ_border_width="2dp" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/paddingSize"
+                    android:text="Kimsan"
                     android:textColor="@color/hintColor"
                     android:textSize="@dimen/text_size"
-                    android:text="Admin name"
-                    android:layout_margin="@dimen/paddingSize"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Write news to place"
-                    android:textSize="@dimen/textSizeSmall"
+                    android:layout_marginHorizontal="@dimen/paddingSize"
+                    android:text="Write news to Dorm"
                     android:textColor="@color/hintColor"
-                    android:layout_marginHorizontal="@dimen/paddingSize"/>
+                    android:textSize="@dimen/textSizeSmall" />
             </LinearLayout>
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1">
+
             <EditText
                 android:id="@+id/txt_title"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/white_round_background"
                 android:layout_margin="@dimen/paddingSize"
-                android:paddingHorizontal="@dimen/paddingSize"
+                android:background="@drawable/white_round_background"
                 android:hint="Write new title here"
-                android:textColor="@color/colorPrimary"/>
+                android:paddingHorizontal="@dimen/paddingSize"
+                android:textColor="@color/colorPrimary"
+                android:textCursorDrawable="@null" />
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="4"
             android:layout_margin="@dimen/paddingSize"
-            >
+            android:layout_weight="4">
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/white_round_background">
+
                 <EditText
                     android:id="@+id/txt_description"
-                    android:background="#fff"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="Write announcement here ..."
-                    android:textSize="@dimen/text_size"
-                    android:textColor="@color/colorPrimary"
-                    android:gravity="top"
                     android:layout_marginHorizontal="@dimen/paddingSize"
                     android:layout_marginTop="@dimen/paddingSize"
                     android:layout_marginBottom="50dp"
-                    />
+                    android:background="#fff"
+                    android:gravity="top"
+                    android:hint="Write announcement here ..."
+                    android:textColor="@color/colorPrimary"
+                    android:textCursorDrawable="@null"
+                    android:textSize="@dimen/text_size" />
+
                 <LinearLayout
-                    android:onClick="showPopup"
                     android:id="@+id/upload_pic"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentRight="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
+                    android:onClick="showPopup"
                     android:orientation="horizontal">
+
                     <TextView
-                        android:layout_marginTop="@dimen/paddingSize"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/hintColor"
-                        android:textSize="@dimen/text_size"
+                        android:layout_marginTop="@dimen/paddingSize"
                         android:text="Tap here to upload image"
-                        />
+                        android:textColor="@color/hintColor"
+                        android:textSize="@dimen/text_size" />
+
                     <ImageView
                         android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:layout_margin="@dimen/paddingSize"
-                        android:src="@drawable/ic_photo"/>
+                        android:src="@drawable/ic_photo" />
                 </LinearLayout>
             </RelativeLayout>
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="2"
             android:layout_gravity="center"
+            android:layout_weight="2"
             android:gravity="center">
+
             <ImageView
                 android:id="@+id/image_upload"
                 android:layout_width="250dp"
                 android:layout_height="150dp" />
         </LinearLayout>
     </LinearLayout>
-    <com.victor.loading.rotate.RotateLoading
-        android:id="@+id/rotate_loading_addnews"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        app:loading_color="@color/colorPrimary"
-        android:layout_centerInParent="true"/>
+
+    <LinearLayout
+        android:id="@+id/loding_bg_add_news"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#aaffffff"
+        android:gravity="center">
+
+        <com.victor.loading.rotate.RotateLoading
+            android:id="@+id/rotate_loading_addnews"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerInParent="true"
+            app:loading_color="@color/colorPrimary" />
+    </LinearLayout>
 </RelativeLayout>

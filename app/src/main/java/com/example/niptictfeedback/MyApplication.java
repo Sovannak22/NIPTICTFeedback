@@ -4,10 +4,10 @@ import android.app.Application;
 
 public class MyApplication extends Application {
 
-    private String urlShare="http://192.168.100.2:8000/";
+    private String urlShare="http://172.23.15.217:8000/";
     private String urlLocal="http://10.0.2.2:8000/";
     private String authorization,accept="application/json";
-    private String baseUrl=urlLocal;
+    private String baseUrl=urlShare;
 
     public String getBaseUrl() {
         return baseUrl;

@@ -12,12 +12,9 @@ import android.widget.LinearLayout;
 import com.emredavarci.noty.Noty;
 import com.example.niptictfeedback.R;
 import com.example.niptictfeedback.adapter.page_adapter.model_adapter.FeedbackAdapter;
-import com.example.niptictfeedback.adapter.page_adapter.model_adapter.NewsAdapter;
 import com.example.niptictfeedback.adapter.page_adapter.model_adapter.PrivateFeedbackAdapter;
 import com.example.niptictfeedback.apis.FeedbackApi;
-import com.example.niptictfeedback.apis.NewsApi;
 import com.example.niptictfeedback.models.FeedBack;
-import com.example.niptictfeedback.models.News;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,31 +25,31 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class PrivateFeedbackAdminActivity extends AppCompatActivity {
+public class PublicFeedbackAdminActivity extends AppCompatActivity {
 
     private FeedbackApi feedbackApi;
     private LinearLayout alertPopUp,noNewFound;
     private RecyclerView recyclerView;
-    private PrivateFeedbackAdapter feedbackAdapter;
+    private FeedbackAdapter feedbackAdapter;
     private List<FeedBack> feedBacks;
     private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_private_feedback_admin);
+        setContentView(R.layout.activity_public_feedback_admin);
 
-        toolbar = findViewById(R.id.toolbar_admin_private_feedback);
+        toolbar = findViewById(R.id.toolbar_admin_public_feedback);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        noNewFound = findViewById(R.id.no_new_found_private_feedback);
+        noNewFound = findViewById(R.id.no_new_found_public_feedback);
         noNewFound.setVisibility(View.GONE);
 
-        alertPopUp = findViewById(R.id.alert_popup_private_feedback_admin);
+        alertPopUp = findViewById(R.id.alert_popup_public_feedback_admin);
         feedBacks = new ArrayList<>();
-        recyclerView = findViewById(R.id.rcl_private_feedback_admin);
+        recyclerView = findViewById(R.id.rcl_public_feedback_admin);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -68,7 +65,7 @@ public class PrivateFeedbackAdminActivity extends AppCompatActivity {
 
     public void getNews(){
         String auth=((MyApplication) getApplicationContext()).getAuthorization();
-        Call<List<FeedBack>> call = feedbackApi.getPrivateFeedbackAdmin(auth);
+        Call<List<FeedBack>> call = feedbackApi.getPublicFeedbackAdmin(auth);
         call.enqueue(new Callback<List<FeedBack>>() {
             @Override
             public void onResponse(Call<List<FeedBack>> call, Response<List<FeedBack>> response) {
@@ -84,7 +81,7 @@ public class PrivateFeedbackAdminActivity extends AppCompatActivity {
                 }
                 feedBacks= response.body();
                 if (feedBacks.size()>0){
-                    feedbackAdapter = new PrivateFeedbackAdapter(feedBacks,getApplicationContext(),recyclerView,PrivateFeedbackAdminActivity.this,"PrivateFeedbackAdminActivity");
+                    feedbackAdapter = new FeedbackAdapter(feedBacks,getApplicationContext(),recyclerView);
                     recyclerView.setAdapter(feedbackAdapter);
                     return;
                 }

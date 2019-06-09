@@ -51,6 +51,7 @@ public class AddNewsActivity extends AppCompatActivity {
     private final int REQUEST_IMAGE_GALLERY = 2,REQUEST_IMAGE_CAPTURE=1;
     ImageView imageUploaded;
     EditText txtTitle,txtDescription;
+    LinearLayout loadingBg;
     NewsApi newsApi;
     private final int STORAGE_PERMISSION_CODE=3;
 
@@ -68,6 +69,9 @@ public class AddNewsActivity extends AppCompatActivity {
 
         toolbar = findViewById(R.id.toolbar_admin_news);
         setSupportActionBar(toolbar);
+
+        loadingBg = findViewById(R.id.loding_bg_add_news);
+        loadingBg.setVisibility(View.GONE);
 
         dialog = new Dialog(this);
         imageUploaded = findViewById(R.id.image_upload);
@@ -100,6 +104,27 @@ public class AddNewsActivity extends AppCompatActivity {
             public void onResponse(Call<News> call, Response<News> response) {
                 if (!response.isSuccessful()){
                     Log.w("Register:: ",response.code()+""+response.message());
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+                    builder.setTitle("Something went wrong");
+                    builder.setMessage("Upload fail please check your internet connection");
+                    builder.setPositiveButton("OK",
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    final AlertDialog dialog = builder.create();
+                    dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                        @Override
+                        public void onShow(DialogInterface dialogInterface) {
+                            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.textColorAlert));
+                            dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.colorPrimary));
+                        }
+                    });
+                    dialog.show();
+                    rotateLoading.stop();
+                    loadingBg.setVisibility(View.GONE);
                     return;
                 }
 
@@ -108,6 +133,7 @@ public class AddNewsActivity extends AppCompatActivity {
                 startActivity(intent);
                 Toast.makeText(getApplicationContext(),"News has added",Toast.LENGTH_LONG).show();
                 rotateLoading.stop();
+                loadingBg.setVisibility(View.GONE);
                 finish();
             }
 
@@ -115,6 +141,7 @@ public class AddNewsActivity extends AppCompatActivity {
             public void onFailure(Call<News> call, Throwable t) {
                 Log.w("Register fail::",t.getMessage()+"");
                 rotateLoading.stop();
+                loadingBg.setVisibility(View.GONE);
             }
         });
     }
@@ -133,6 +160,7 @@ public class AddNewsActivity extends AppCompatActivity {
     if (id == R.id.add_news){
             Toast.makeText(getApplicationContext(),"Add new clicked",Toast.LENGTH_LONG).show();
             rotateLoading.start();
+            loadingBg.setVisibility(View.VISIBLE);
             createNews();
             return true;
         }

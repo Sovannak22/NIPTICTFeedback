@@ -13,7 +13,8 @@
         android:roundIcon="@drawable/ic_feedback"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".PrivateFeedbackAdminActivity"></activity>
+        <activity android:name=".PublicFeedbackAdminActivity"></activity>
+        <activity android:name=".PrivateFeedbackAdminActivity" />
         <activity android:name=".CommentActivity" />
         <activity android:name=".CreatePostActivity" />
         <activity android:name=".NewInfoActivity" />
@@ -21,12 +22,13 @@
         <activity android:name=".AddNewsActivity" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".LoginActivity" />
-        <activity android:name=".AppActivity"
-            android:exported="true"/>
+        <activity
+            android:name=".AppActivity"
+            android:exported="true" />
         <activity android:name=".NewsAdminActivity" />
         <activity android:name=".SelectPrivacyActivity" />
-        <activity android:name=".UpdateNewsActivity"/>
-        <activity android:name=".EditPostActivity"/>
+        <activity android:name=".UpdateNewsActivity" />
+        <activity android:name=".EditPostActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

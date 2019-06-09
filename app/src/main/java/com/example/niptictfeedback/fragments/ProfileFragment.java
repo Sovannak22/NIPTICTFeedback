@@ -94,7 +94,6 @@ public class ProfileFragment extends Fragment {
         privateTabItem = v.findViewById(R.id.tab_private);
         responseTabItem = v.findViewById(R.id.tab_response);
         viewPager = v.findViewById(R.id.viewPager_id);
-        edit_img = v.findViewById(R.id.edit_infor);
         cameraProfile = v.findViewById(R.id.profile_image);
         tvProfileName = v.findViewById(R.id.tvProfile_name);
 
@@ -108,13 +107,13 @@ public class ProfileFragment extends Fragment {
 
         dialog = new Dialog(getContext());
 
-        edit_img.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), EditProfileInforActivity.class);
-                startActivity(intent);
-            }
-        });
+//        edit_img.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(getContext(), EditProfileInforActivity.class);
+//                startActivity(intent);
+//            }
+//        });
 
 
         adapter = new ProfilePageAdapter(getActivity(), getChildFragmentManager(), tabLayout.getTabCount());
@@ -141,10 +140,11 @@ public class ProfileFragment extends Fragment {
         userDBHelper.createNewTable();
         user = userDBHelper.getLoginUser();
         Log.w("Profile URL::",user.getProfileImg());
-       // Picasso.get().load(baseUrl+(user.getProfileImg())).into(cameraProfile);
+
         tvProfileName.setText(user.getName()+"");
 
         String baseUrl=((MyApplication)getActivity().getApplication()).getBaseUrl();
+        Picasso.get().load(baseUrl+(user.getProfileImg())).into(cameraProfile);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -177,7 +177,9 @@ public class ProfileFragment extends Fragment {
                     return;
                 }
                 User userResponce = response.body();
-                userDBHelper.updateProfilePic(userResponce.getProfileImg());
+                User user = userDBHelper.getLoginUser();
+                String user_id = user.getId();
+                userDBHelper.updateProfilePic(userResponce.getProfileImg(),user_id);
                 Log.w("Upload Profile:: ","Successfully "+response);
                 item.setVisible(false);
                 Toast.makeText(getContext(),"Update Profile successfully",Toast.LENGTH_SHORT).show();

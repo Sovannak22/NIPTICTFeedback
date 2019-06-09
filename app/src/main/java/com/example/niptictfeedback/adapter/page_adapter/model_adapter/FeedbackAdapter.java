@@ -57,7 +57,6 @@ public class FeedbackAdapter extends RecyclerView.Adapter<FeedbackAdapter.MyView
 
             @Override
             public void onComment(int p) {
-                Toast.makeText(context,"more clicked",Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(context,CommentActivity.class);
                 String id = feedBacks.get(p).getId();
                 intent.putExtra("FeedbackID",id);
@@ -66,7 +65,6 @@ public class FeedbackAdapter extends RecyclerView.Adapter<FeedbackAdapter.MyView
 
             @Override
             public void onMore(int p) {
-                Toast.makeText(context,"more clicked",Toast.LENGTH_LONG).show();
                 String id = feedBacks.get(p).getId();
                 String place_id = feedBacks.get(p).getPlace_id()+"";
                 String description = feedBacks.get(p).getDescription();
@@ -93,6 +91,9 @@ public class FeedbackAdapter extends RecyclerView.Adapter<FeedbackAdapter.MyView
         myViewHolder.tvUsername.setText(feedBacks.get(i).getUsername());
 
         User user = userDBHelper.getLoginUser();
+        if (feedBacks.get(i).getImg()==null){
+            myViewHolder.imageFeedback.setVisibility(View.GONE);
+        }
         if (user.getId().equals(feedBacks.get(i).getUser_id())){
             myViewHolder.btnMore.setVisibility(View.VISIBLE);
             myViewHolder.tvUsername.setTextColor(context.getResources().getColor(R.color.startblue));
